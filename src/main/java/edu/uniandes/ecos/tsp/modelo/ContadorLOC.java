@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,122 +20,140 @@ public class ContadorLOC {
 	/**
 	 * Refers to the current file to read
 	 */
-	private File sourceFile;
+	private File archivoFuente;
 	
 	/**
 	 * Counts the total lines present in file
 	 */
-	private int totalLines;
+	private int lineasTotales;
 	
 	/**
 	 * Counts the effective lines in the file
 	 */
-	private int efffectiveLines;
+	private int lineasEfectivas;
 	
 	/**
 	 * Counts the number of methods
 	 */
-	private int methods;
+	private int numeroDeMetodos;
 	
 	/**
 	 * Stores the method names of the current file
 	 */
-	private ArrayList<String> methodNames;
+	private ArrayList<String> nombresDeMetodos;
 	
 	/**
 	 * Define the string to recognize a One-Line comment
 	 */
-	private static final String LINE_COMMENT = "//";
+	private static final String COMENTARIO_LINEA = "//";
 	
 	/**
 	 * Define the string to recognize a Multi-Line comment start
 	 */
-	private static final String MULTILINE_COMMENT_START = "/*";
+	private static final String INICIO_COMENTARIO_MULTIPLE = "/*";
 	
 	/**
 	 * Define the string to recognize a Multi-Line comment end
 	 */ 
-	private static final String MULTILINE_COMMENT_END = "*/";
+	private static final String FIN_COMENTARIO_MULTIPLE = "*/";
+	
+	/**
+	 * Almacena la totalidad de las lineas de codigo
+	 * que contiene el archivo actual
+	 */
+	private ArrayList<String> lineasDeCodigo;
+	
+	/**
+	 * Almacena las lineas de codigo inmersas en
+	 * cada uno de los metodos
+	 */
+	private HashMap<String, Integer> lineasEnMetodos;
 	
 	/**
 	 * Public constructor. No arguments
 	 */
 	public ContadorLOC(){
-		sourceFile = null;
-		totalLines = 0;
-		efffectiveLines = 0;
-		methods = 0;
-		methodNames = new ArrayList<String>();
+		archivoFuente = null;
+		lineasTotales = 0;
+		lineasEfectivas = 0;
+		numeroDeMetodos = 0;
+		nombresDeMetodos = new ArrayList<String>();
+		lineasDeCodigo = new ArrayList<String>();
 	}
 	
 	/**
 	 * Tries to retrieve and initialize the file to read
-	 * @param filePath Path for the file to read
+	 * @param rutaDeArchivo Path for the file to read
 	 * @return <code>true</code> if the file exists and could be initialized.
 	 * <code>false</code> otherwise.
 	 */
-	protected boolean initializeFile(String filePath){
-		sourceFile = new File(filePath);
-		return (sourceFile.exists() && sourceFile.isFile());
+	protected boolean inicializarArchivo(String rutaDeArchivo){
+		archivoFuente = new File(rutaDeArchivo);
+		return (archivoFuente.exists() && archivoFuente.isFile());
 	}
 	
 	/**
 	 * Method that reads the number of LOC from a defined file
-	 * @param fileToRead
+	 * @param rutaArchivo
 	 * 		The input file to be read
 	 * @throws IOException 
 	 */
-	public void countLines(String fileToRead) throws IOException{
-		if(!initializeFile(fileToRead)){
+	public void contarLineasDeCodigo(String rutaArchivo) throws IOException{
+		if(!inicializarArchivo(rutaArchivo)){
 			System.out.println("LOCCounter: Error. File does not exist or could not be initialized");
 			return;
 		}
 		
-		FileReader fileReader = new FileReader(sourceFile);
-		BufferedReader buffer = new BufferedReader(fileReader);
-		String currentLine = null;
-		Boolean commented = false;
+		FileReader lectorArchivo = new FileReader(archivoFuente);
+		BufferedReader buffer = new BufferedReader(lectorArchivo);
+		String lineaActual = null;
+		Boolean esComentario = false;
+		String nombreDeMetodo = "";
+		ArrayList<String> lineasDeMetodo = null;
+		
 		
 		//Read lines from text file
-		while((currentLine = buffer.readLine()) != null){
-			totalLines++;
-			currentLine = currentLine.trim();
-			if(!currentLine.isEmpty()){
+		while((lineaActual = buffer.readLine()) != null){
+			lineasTotales++;
+			lineaActual = lineaActual.trim();
+			if(!lineaActual.isEmpty()){
 				//Verifies if current line is part of a comment
-				if(currentLine.startsWith(LINE_COMMENT)){
+				if(lineaActual.startsWith(COMENTARIO_LINEA)){
 					continue;
 				}
-				else if(currentLine.startsWith(MULTILINE_COMMENT_START)){
-					commented = true;
+				else if(lineaActual.startsWith(INICIO_COMENTARIO_MULTIPLE)){
+					esComentario = true;
 					continue;
 				}
-				else if(currentLine.startsWith(MULTILINE_COMMENT_END)){
-					commented = false;
+				else if(lineaActual.startsWith(FIN_COMENTARIO_MULTIPLE)){
+					esComentario = false;
 					continue;
 				}
-				else if(commented){
+				else if(esComentario){
 					continue;
 				}
-				efffectiveLines++;
-				verifyMethod(currentLine);
+				lineasEfectivas++;
+				verificarMetodo(lineaActual);
+				lineasDeCodigo.add(lineaActual);
 			}
 		}
 		buffer.close();
-		fileReader.close();
+		lectorArchivo.close();
+		agruparLineasMetodo();
 	}
 	
 	/**
 	 * Evaluates if a line belongs to a method declaration
-	 * @param currentLine
+	 * @param lineaActual
 	 */
-	private void verifyMethod(String currentLine){
-		String regexMethodPattern = "^(public|private|protected)\\s[\\w\\<\\>\\s]+\\({1}";
-		Pattern pattern = Pattern.compile(regexMethodPattern);
-		Matcher matcher = pattern.matcher(currentLine);
+	private void verificarMetodo(String lineaActual){
+		String regex = "^(public|private|protected)\\s[\\w\\<\\>\\s]+\\({1}";
+		Pattern patron = Pattern.compile(regex);
+		Matcher matcher = patron.matcher(lineaActual);
 		if(matcher.find()){
-			methods++;
-			methodNames.add(currentLine.substring(0, 
-					currentLine.indexOf("(")));
+			numeroDeMetodos++;
+			nombresDeMetodos.add(lineaActual.substring(0, 
+					lineaActual.indexOf("(")));
 		}
 	}
 	
@@ -143,8 +162,8 @@ public class ContadorLOC {
 	 * @return The total lines of code (blanks included) in
 	 * the current file, or 0 if file has not been read
 	 */
-	public int getTotalLines(){
-		return this.totalLines;
+	public int getLineasTotales(){
+		return this.lineasTotales;
 	}
 	
 	/**
@@ -152,16 +171,16 @@ public class ContadorLOC {
 	 * @return The effective lines of code (without blanks or comments) in
 	 * the current file, or 0 if file has not been read
 	 */
-	public int getEfffectiveLines(){
-		return this.efffectiveLines;
+	public int getLineasEfectivas(){
+		return this.lineasEfectivas;
 	}
 	
 	/**
 	 * Returns the name for the current file to be counted
 	 * @return The name of the current source file
 	 */
-	public String getSourceFileName(){
-		return this.sourceFile.getName();
+	public String getNombreArchivoFuente(){
+		return this.archivoFuente.getName();
 	}
 	
 	/**
@@ -169,7 +188,7 @@ public class ContadorLOC {
 	 * @return The number of methods in source file
 	 */
 	public int getMethodCount(){
-		return this.methods;
+		return this.numeroDeMetodos;
 	}
 	
 	/**
@@ -178,7 +197,7 @@ public class ContadorLOC {
 	 */
 	public String getMethodNamesSummary(){
 		StringBuffer methodNameBuffer = new StringBuffer();
-		for(String currentMethod : this.methodNames){
+		for(String currentMethod : this.nombresDeMetodos){
 			methodNameBuffer.append(currentMethod + "\n");
 		}
 		return methodNameBuffer.toString();
@@ -189,7 +208,24 @@ public class ContadorLOC {
 	 * @return An <code>ArrayList</code> with the method names
 	 */
 	public ArrayList<String> getMethodNames(){
-		return this.methodNames;
+		return this.nombresDeMetodos;
+	}
+	
+	/**
+	 * Este método agrupa en una lista las líneas actuales de código
+	 * que pertenecen al metodo actual y las adiciona al HashMap de métodos
+	 * cuando se haya finalizado 
+	 */
+	public void agruparLineasMetodo(){
+		int contadorCorchetes = 0;
+		int contadorLineasMetodo = 0;
+		int indice = 0;
+		if(!nombresDeMetodos.isEmpty()){
+			for(String nombreMetodo : nombresDeMetodos){
+				indice = lineasDeCodigo.indexOf(nombreMetodo);
+				//TODO: Definir conteo, ya que el while no funciona correctamente
+			}
+		}
 	}
 
 }
