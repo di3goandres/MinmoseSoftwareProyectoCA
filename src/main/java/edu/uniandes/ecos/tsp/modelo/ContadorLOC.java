@@ -41,6 +41,12 @@ public class ContadorLOC {
 	 * Stores the method names of the current file
 	 */
 	private ArrayList<String> nombresDeMetodos;
+	
+	/**
+	 * Almacena las líneas de código de cada uno de los métodos
+	 * definidos
+	 */
+	private HashMap<String, ArrayList<String>> lineasDeMetodos;
 
 	/**
 	 * Define the string to recognize a One-Line comment
@@ -73,6 +79,7 @@ public class ContadorLOC {
 		numeroDeMetodos = 0;
 		nombresDeMetodos = new ArrayList<String>();
 		lineasDeCodigo = new ArrayList<String>();
+		lineasDeMetodos = new HashMap<String, ArrayList<String>>();
 	}
 
 	/**
@@ -131,7 +138,7 @@ public class ContadorLOC {
 		}
 		buffer.close();
 		lectorArchivo.close();
-		agruparLineasMetodo();
+		lineasDeMetodos = agruparLineasMetodo();
 	}
 
 	/**
@@ -184,7 +191,7 @@ public class ContadorLOC {
 	 * 
 	 * @return The number of methods in source file
 	 */
-	public int getMethodCount() {
+	public int getConteoMetodos() {
 		return this.numeroDeMetodos;
 	}
 
@@ -194,7 +201,7 @@ public class ContadorLOC {
 	 * @return A single <code>String</code> with the names of the retrieved
 	 *         methods
 	 */
-	public String getMethodNamesSummary() {
+	public String getResumenNombresMetodos() {
 		StringBuffer methodNameBuffer = new StringBuffer();
 		for (String currentMethod : this.nombresDeMetodos) {
 			methodNameBuffer.append(currentMethod + "\n");
@@ -207,8 +214,19 @@ public class ContadorLOC {
 	 * 
 	 * @return An <code>ArrayList</code> with the method names
 	 */
-	public ArrayList<String> getMethodNames() {
+	public ArrayList<String> getNombresDeMetodos() {
 		return this.nombresDeMetodos;
+	}
+	
+	/**
+	 * Obtiene el HashMap en el que se almacenan las líneas de código
+	 * correspondientes a los métodos
+	 * @return	Una instancia de <code>HashMap</code> cuya clave es el nombre de
+	 * cada método en la clase y el valor es un <code>ArrayList</code> con las líneas
+	 * de código del respectivo método
+	 */
+	public HashMap<String, ArrayList<String>> getLineasDeMetodos(){
+		return this.lineasDeMetodos;
 	}
 
 	/**
