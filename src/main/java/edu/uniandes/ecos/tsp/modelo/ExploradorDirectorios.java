@@ -9,30 +9,30 @@ import java.util.ArrayList;
 
 public class ExploradorDirectorios {
 	
-private File workingDirectory;
+	private File directorioDeTrabajo;
 	
-	private int totalLines;
+	private int lineasTotales;
 	
-	private int effectiveLines;
+	private int lineasEfectivas;
 	
-	private String projectName;
+	private String nombreProyecto;
 	
-	private ArrayList<File> filesToCount;
+	private ArrayList<File> listadoArchivos;
 	
-	private ArrayList<ContadorLOC> countersList;
+	private ArrayList<ContadorLOC> listaContadores;
 	
 	public ExploradorDirectorios(String projectName){
 		this();
-		this.projectName = projectName;
+		this.nombreProyecto = projectName;
 	}
 	
 	public ExploradorDirectorios(){
-		workingDirectory = null;
-		filesToCount = new ArrayList<File>();
-		countersList = new ArrayList<ContadorLOC>();
-		totalLines = 0;
-		effectiveLines = 0;
-		projectName = "Undefined";
+		directorioDeTrabajo = null;
+		listadoArchivos = new ArrayList<File>();
+		listaContadores = new ArrayList<ContadorLOC>();
+		lineasTotales = 0;
+		lineasEfectivas = 0;
+		nombreProyecto = "Undefined";
 	}
 	
 	/**
@@ -41,9 +41,9 @@ private File workingDirectory;
 	 * @return <code>true</code> if directory exists. 
 	 * <code>false</code> otherwise
 	 */
-	protected boolean initDirectory(String dirPath){
-		workingDirectory = new File(dirPath);
-		return (workingDirectory.exists() && workingDirectory.isDirectory());
+	protected boolean iniciarDirectorio(String dirPath){
+		directorioDeTrabajo = new File(dirPath);
+		return (directorioDeTrabajo.exists() && directorioDeTrabajo.isDirectory());
 	}
 	
 	/**
@@ -64,42 +64,42 @@ private File workingDirectory;
 	 * Retrieves the total LOC of the entire project
 	 * @return The numbers of total lines
 	 */
-	public int getProjectTotalLines(){
-		return this.totalLines;
+	public int getLineastotalesProyecto(){
+		return this.lineasTotales;
 	}
 	
 	/**
 	 * Retrieves the number of effective LOC of the entire project
 	 * @return The numbers of effective lines
 	 */
-	public int getProjectEffectiveLines(){
-		return this.effectiveLines;
+	public int getLineasEfectivasProyecto(){
+		return this.lineasEfectivas;
 	}
 	
 	/**
 	 * Counts the LOC for each Java source file in the working
 	 * directory
-	 * @param dirName The root directory of the current project
+	 * @param directorio The root directory of the current project
 	 */
-	public void sendToContadorLOC(String dirName){
-		Path currentPath = Paths.get(dirName);
-		String absolutePath = currentPath.toAbsolutePath().toString();
-		if(!initDirectory(absolutePath)){
-			System.out.println("ProgramContadorLOC: Error loading current work directory");
+	public void enviarAContadorLOC(String directorio){
+		Path dirActual = Paths.get(directorio);
+		String dirAbsoluto = dirActual.toAbsolutePath().toString();
+		if(!iniciarDirectorio(dirAbsoluto)){
+			System.out.println("ProgramContadorLOC: Error al cargar el directorion actual de trabajo");
 			return;
 		}
 		try {
-			retrieveFiles(absolutePath);
+			recuperarArchivos(dirAbsoluto);
 			//Counts the LOC inside project
-			for(File javaFile : filesToCount){
+			for(File javaFile : listadoArchivos){
 				ContadorLOC fileContadorLOC = new ContadorLOC();
-				fileContadorLOC.countLines(javaFile.getAbsolutePath());
-				totalLines += fileContadorLOC.getTotalLines();
-				effectiveLines += fileContadorLOC.getEfffectiveLines();
-				countersList.add(fileContadorLOC);
+				fileContadorLOC.contarLineasDeCodigo(javaFile.getAbsolutePath());
+				lineasTotales += fileContadorLOC.getLineasTotales();
+				lineasEfectivas += fileContadorLOC.getLineasEfectivas();
+				listaContadores.add(fileContadorLOC);
 			}
 		} catch (IOException e) {
-			System.out.println("ProgramContadorLOC: Error trying to count LOC for Project");
+			System.out.println("ProgramContadorLOC: Excepción al contar las LOC del Proyecto");
 			e.printStackTrace();
 			return;
 		}
@@ -107,20 +107,20 @@ private File workingDirectory;
 	
 	/**
 	 * Retrieves recursively all Java files from given path
-	 * @param filePath The directory path to retrieve Java files
+	 * @param rutaArchivo The directory path to retrieve Java files
 	 * @throws IOException
 	 */
-	public void retrieveFiles(String filePath) throws IOException{
-		File theFile = new File(filePath);
-		File[] filesInside = theFile.listFiles();
-		for(File nextFile : filesInside){
-			if(nextFile.isDirectory()){
-				retrieveFiles(nextFile.getAbsolutePath());
+	public void recuperarArchivos(String rutaArchivo) throws IOException{
+		File archivoActual = new File(rutaArchivo);
+		File[] listaArchivosEnActual = archivoActual.listFiles();
+		for(File proximoArchivo : listaArchivosEnActual){
+			if(proximoArchivo.isDirectory()){
+				recuperarArchivos(proximoArchivo.getAbsolutePath());
 			}
 		}
-		File[] javaFiles = theFile.listFiles(getJavaFileFilter());
+		File[] javaFiles = archivoActual.listFiles(getJavaFileFilter());
 		for(File nextJavaFile : javaFiles){
-			filesToCount.add(nextJavaFile);
+			listadoArchivos.add(nextJavaFile);
 		}
 	}
 	
@@ -128,24 +128,24 @@ private File workingDirectory;
 	 * Retrieves the instances of <code>ContadorLOC</code> retrieved
 	 * @return The list of the LOC Counters for current project
 	 */
-	public ArrayList<ContadorLOC> getCountersList(){
-		return this.countersList;
+	public ArrayList<ContadorLOC> getListaContadores(){
+		return this.listaContadores;
 	}
 	
 	/**
 	 * Retrieves the String for the absolute path of the working directory
 	 * @return The Path of the root working directory
 	 */
-	public String getWorkingDirectoryPath(){
-		return this.workingDirectory.getAbsolutePath();
+	public String getRutaDirectorioDeTrabajo(){
+		return this.directorioDeTrabajo.getAbsolutePath();
 	}
 	
 	/**
 	 * Retrieves the name of the current Project
 	 * @return
 	 */
-	public String getProjectName(){
-		return this.projectName;
+	public String getNombreProyecto(){
+		return this.nombreProyecto;
 	}
 
 }
