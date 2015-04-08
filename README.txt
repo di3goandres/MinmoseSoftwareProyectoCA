@@ -4,7 +4,11 @@ Especializacion en construccion de Software
 Universidad de los Andes
 
 Contribuyentes:
-Alejandra Chica: aleja.chika@gmail.com
+Diego Montealegre: da.montealegre10@uniandes.edu.co
+Alejandra Chica: am.chica10@uniandes.edu.co
+Daniel Rentería: df.renteria10@uniandes.edu.co
+Deivid Osorio: da.osorio12@uniandes.edu.co
+Sebastian Cardona: s.cardona12@uniandes.edu.co
 
 
 Instrucciones para obtener el repositorio desde github:
