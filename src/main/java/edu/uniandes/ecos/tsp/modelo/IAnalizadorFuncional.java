@@ -1,5 +1,7 @@
 package edu.uniandes.ecos.tsp.modelo;
 
+import java.io.IOException;
+
 /**
  * @author Minmose
  * @version 1.0
@@ -10,8 +12,10 @@ public interface IAnalizadorFuncional {
 
 	/**
 	 * Realiza el analisis de las caracteristicas de un programa.
+	 * @return String con el resultado del analisis.
+	 * @throws IOException Excepcion al realizar la lectura de los archivos java que seran analizados.
 	 */
-	String realizarAnalisis();
+	String realizarAnalisis() throws IOException;
 
 	String mostrarReporte();
 

@@ -1,4 +1,6 @@
 package edu.uniandes.ecos.tsp.controlador;
+import java.io.IOException;
+
 import edu.uniandes.ecos.tsp.modelo.AnalizadorFuncional;
 import edu.uniandes.ecos.tsp.modelo.IAnalizadorFuncional;
 
@@ -26,8 +28,9 @@ public class Controlador {
 	/**
 	 * Metodo encargado de invocar el analisis funcional de un programa.
 	 * @return String Resultado del analisis.
+	 * @throws IOException Excepcion al realizar la lectura de los archivos java que seran analizados.
 	 */
-	public String realizarAnalisisFuncional(){
+	public String realizarAnalisisFuncional() throws IOException{
 		
 		return analizadorFuncional.realizarAnalisis();
 	}

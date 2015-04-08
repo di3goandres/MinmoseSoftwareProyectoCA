@@ -1,5 +1,9 @@
 package edu.uniandes.ecos.tsp.modelo;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author Minmose
  * @version 1.0
@@ -18,8 +22,29 @@ public class CalculadorDataBindingInterno {
 	 * 
 	 * @param numeroParametros
 	 */
-	public int calcularFuerzaUnionInternaPorMetodo(int numeroParametros){
-		return 0;
+	public int calcularFuerzaUnionInternaPorMetodo(List<String> lineasPorMetodo){
+		
+		int fuerzaUnionInterna = 0;
+		
+		if(lineasPorMetodo !=  null && !lineasPorMetodo.isEmpty()){
+			
+			for (String lineaDeCodigo : lineasPorMetodo) {
+				
+				lineaDeCodigo = lineaDeCodigo.trim().toLowerCase();
+				
+				if(validarLineaModificadoraVariables(lineaDeCodigo)){
+					
+					fuerzaUnionInterna++;
+				}
+			}
+		}
+		
+		/*
+		 * Se supone que la primera linea que viene en el arreglo es la firma del metodo.
+		 */
+		fuerzaUnionInterna += determinarNumParametrosMetodo(lineasPorMetodo.get(0));
+		
+		return fuerzaUnionInterna;
 	}
 
 	/**
@@ -29,6 +54,31 @@ public class CalculadorDataBindingInterno {
 	 */
 	public int calcularFuerzaUnionInternaTotal(int numeroParametros){
 		return 0;
+	}
+	
+	private boolean validarLineaModificadoraVariables(String lineaDeCodigo){
+		
+		//TODO: crear expresion regular
+		String regex = "^(public|private|protected)\\s[\\w\\<\\>\\s]+\\({1}";
+		Pattern patron = Pattern.compile(regex);
+		
+		Matcher matcher = patron.matcher(lineaDeCodigo);
+		
+		if (matcher.find()) {
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private int determinarNumParametrosMetodo(String lineaDeCodigo){
+		
+		int numParametros = 0;
+		
+		//TODO: completar la implementacion
+		
+		return numParametros;
 	}
 
 }

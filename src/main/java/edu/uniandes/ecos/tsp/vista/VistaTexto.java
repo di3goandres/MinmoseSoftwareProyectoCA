@@ -1,4 +1,6 @@
 package edu.uniandes.ecos.tsp.vista;
+import java.io.IOException;
+
 import edu.uniandes.ecos.tsp.controlador.Controlador;
 
 /**
@@ -11,10 +13,16 @@ public class VistaTexto {
 
 	public static void main(String[] args) {
 		
-		Controlador controlador = new Controlador();
-		String resultado = controlador.realizarAnalisisFuncional();
-		
-		System.out.println(resultado);
+		try {
+			
+			Controlador controlador = new Controlador();
+			String resultado = controlador.realizarAnalisisFuncional();
+			
+			System.out.println(resultado);
+		} catch (IOException e) {
+
+			System.out.println("Ocurrio un error al leer los archivos java para su analisis.");
+		}
 	}
 
 }

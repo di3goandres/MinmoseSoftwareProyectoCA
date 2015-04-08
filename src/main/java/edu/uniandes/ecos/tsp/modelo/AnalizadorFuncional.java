@@ -1,5 +1,10 @@
 package edu.uniandes.ecos.tsp.modelo;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Minmose
  * @version 1.0
@@ -7,6 +12,8 @@ package edu.uniandes.ecos.tsp.modelo;
  */
 public class AnalizadorFuncional implements IAnalizadorFuncional {
 
+	public static final String RUTA_ARCHIVO = "src/site/resources";
+	
 	/**
 	 * Representa el total del acoplamiento del metodo analizado.
 	 */
@@ -43,6 +50,11 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	 *Calculador de fuerza de union interna. 
 	 */
 	private CalculadorDataBindingInterno calculadorDataBindingInterno;
+	
+	/**
+	 * Objeto que realiza el conteo de loc de una clase.
+	 */
+	private ContadorLOC contadorLOC;
 
 	/**
 	 * Metodo constructor.
@@ -52,27 +64,43 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 		calculadorDataBindingInterno = new CalculadorDataBindingInterno();
 		calculadorDataBindingExterno = new CalculadorDataBindingExterno();
 		calculadorAcoplamiento = new CalculadorAcoplamiento();
+		contadorLOC = new ContadorLOC();
 	}
 
 	
 	/**
 	 * Realiza el analisis de las caracteristicas de un programa.
+	 * @return String con el resultado del analisis.
+	 * @throws IOException Excepcion al realizar la lectura de los archivos java que seran analizados.
 	 */
-	public String realizarAnalisis(){
+	public String realizarAnalisis() throws IOException{
 		
-		String resultado = "";
+		StringBuilder resultado = new StringBuilder();
+		
+		contadorLOC.contarLineasDeCodigo(RUTA_ARCHIVO);
+		
+		Map<String, ArrayList<String>> mapaMetodo= contadorLOC.getLineasDeMetodos();
 		
 		/*
-		 * Se calcula la fuerza de union interna
+		 * Se calcula la fuerza de union interna por metodo
 		 */
 		//TODO: completar la implementacion
-		totalFuerzaUnionInternaMetodo = calculadorDataBindingInterno.calcularFuerzaUnionInternaPorMetodo(0);
+		for (String nombreMetodo : mapaMetodo.keySet()) {
+			
+			totalFuerzaUnionInternaMetodo = calculadorDataBindingInterno.calcularFuerzaUnionInternaPorMetodo(mapaMetodo.get(nombreMetodo));
+			
+			resultado.append("El resultado de la fuerza de union interna del metodo ");
+			resultado.append(nombreMetodo);
+			resultado.append(" es: ");
+			resultado.append(totalFuerzaUnionInternaMetodo); 
+		}
+		
 		totalFuerzaUnionInterna = calculadorDataBindingInterno.calcularFuerzaUnionInternaTotal(0);
 		
-		resultado = "El resultado de la fuerza de union interna por metodo es: " + totalFuerzaUnionInternaMetodo 
-				+ "El resultado de la fuerza de union interna total del programa es: " + totalFuerzaUnionInterna;
+		resultado.append("El resultado de la fuerza de union interna total del programa es: ");
+		resultado.append(totalFuerzaUnionInterna);
 		
-		return resultado;
+		return resultado.toString();
 	}
 
 	public String mostrarReporte(){
