@@ -8,6 +8,9 @@ package edu.uniandes.ecos.tsp.modelo;
 public class CalculadorDataBindingExterno {
 
 
+	/**
+	 * Metodo constructor
+	 */
 	public CalculadorDataBindingExterno(){
 
 	}

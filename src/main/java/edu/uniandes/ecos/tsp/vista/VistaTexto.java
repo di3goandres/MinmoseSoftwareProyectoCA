@@ -11,6 +11,10 @@ import edu.uniandes.ecos.tsp.controlador.Controlador;
  */
 public class VistaTexto {
 
+	/**
+	 * Metodo para ejecutar el programa
+	 * @param args Argumentos para la ejecucion del programa,
+	 */
 	public static void main(String[] args) {
 		
 		try {
@@ -19,6 +23,7 @@ public class VistaTexto {
 			String resultado = controlador.realizarAnalisisFuncional();
 			
 			System.out.println(resultado);
+			
 		} catch (IOException e) {
 
 			System.out.println("Ocurrio un error al leer los archivos java para su analisis.");

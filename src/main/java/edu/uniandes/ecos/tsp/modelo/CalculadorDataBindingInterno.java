@@ -1,26 +1,40 @@
 package edu.uniandes.ecos.tsp.modelo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Clase encargada de calcular la fuerza de union interna o DataBindingInterno.
  * @author Minmose
  * @version 1.0
  * @created 29-mar-2015 09:00:08 p.m.
  */
 public class CalculadorDataBindingInterno {
-
-
-	public CalculadorDataBindingInterno(){
-
-	}
-
+	
+	/**
+	 * Expresion regular para determinar si la linea de codigo analizada modifica una variable.
+	 */
+	private static final String EXP_MODIFICADOR_VARIABLE = "[\\+\\*\\-\\/]+";
+	
+	/**
+	 * Lista que contienen el total de los BD internos por metodo
+	 */
+	private List<Integer> totalDBInterno;
 
 	/**
-	 * Realiza el calculo de la  fuera de union interna de un metodo.
-	 * 
-	 * @param numeroParametros
+	 * Metodo constructor
+	 */
+	public CalculadorDataBindingInterno(){
+
+		totalDBInterno = new ArrayList<Integer>();
+	}
+
+	/**
+	 * Realiza el calculo de la  fuerza de union interna de un metodo.
+	 * @param lineasPorMetodo Lista con las lineas del metodo a analizar
+	 * @return Int total DBInterno por metodo.
 	 */
 	public int calcularFuerzaUnionInternaPorMetodo(List<String> lineasPorMetodo){
 		
@@ -28,9 +42,16 @@ public class CalculadorDataBindingInterno {
 		
 		if(lineasPorMetodo !=  null && !lineasPorMetodo.isEmpty()){
 			
+			/*
+			 * Se supone que la primera linea que viene en el arreglo es la firma del metodo.
+			 */
+			fuerzaUnionInterna += determinarNumParametrosMetodo(lineasPorMetodo.get(0));
+			lineasPorMetodo.remove(0);
+			
+			/*
+			 * Se analizan las demas lineas del cuerpo del metodo
+			 */
 			for (String lineaDeCodigo : lineasPorMetodo) {
-				
-				lineaDeCodigo = lineaDeCodigo.trim().toLowerCase();
 				
 				if(validarLineaModificadoraVariables(lineaDeCodigo)){
 					
@@ -40,31 +61,47 @@ public class CalculadorDataBindingInterno {
 		}
 		
 		/*
-		 * Se supone que la primera linea que viene en el arreglo es la firma del metodo.
+		 * Se acumula el total del DBInterno de este metodo, al total del programa.
 		 */
-		fuerzaUnionInterna += determinarNumParametrosMetodo(lineasPorMetodo.get(0));
+		totalDBInterno.add(fuerzaUnionInterna);
 		
 		return fuerzaUnionInterna;
 	}
 
 	/**
 	 * Realiza el calculo de la  fuera de union interna total de un programa.
-	 * 
-	 * @param numeroParametros
+	 * @return DBInterno total del programa analizado.
 	 */
-	public int calcularFuerzaUnionInternaTotal(int numeroParametros){
-		return 0;
+	public int calcularFuerzaUnionInternaTotal(){
+		
+		int totalDBInternoPrograma = 0;
+		
+		for (Integer totalMetodo : totalDBInterno) {
+			
+			totalDBInternoPrograma += totalMetodo;
+		}
+		
+		return totalDBInternoPrograma;
 	}
 	
+	/**
+	 * Metodo que permite determinar si en la linea de codigo analizada, se esta modificando una variable.
+	 * @param lineaDeCodigo Linea de codigo analizada
+	 * @return true si la linea de codigo analizada modifica una variable, false en caso contrario.
+	 */
 	private boolean validarLineaModificadoraVariables(String lineaDeCodigo){
 		
-		//TODO: crear expresion regular
-		String regex = "^(public|private|protected)\\s[\\w\\<\\>\\s]+\\({1}";
-		Pattern patron = Pattern.compile(regex);
-		
+		Pattern patron = Pattern.compile(EXP_MODIFICADOR_VARIABLE);
 		Matcher matcher = patron.matcher(lineaDeCodigo);
 		
-		if (matcher.find()) {
+		if (matcher.find() && (!lineaDeCodigo.contains("if") && !lineaDeCodigo.contains("else") 
+				&& !lineaDeCodigo.contains("while") && !lineaDeCodigo.contains("switch"))) {
+			
+			return true;
+			
+		}else if (lineaDeCodigo.contains("return") || lineaDeCodigo.contains("set") || lineaDeCodigo.contains("new") || 
+				(lineaDeCodigo.contains("=") && !lineaDeCodigo.contains("!") && !lineaDeCodigo.contains("<")
+						&& !lineaDeCodigo.contains(">") && !lineaDeCodigo.contains("\""))) {
 			
 			return true;
 		}
@@ -72,11 +109,23 @@ public class CalculadorDataBindingInterno {
 		return false;
 	}
 	
+	/**
+	 * Metodo que determina el numero de parametros de un metodo analizado.
+	 * @param lineaDeCodigo Linea de codigo analizada
+	 * @return int Numero de parametros de un metodo.
+	 */
 	private int determinarNumParametrosMetodo(String lineaDeCodigo){
 		
 		int numParametros = 0;
 		
-		//TODO: completar la implementacion
+		String param = lineaDeCodigo.substring(lineaDeCodigo.indexOf('('), lineaDeCodigo.indexOf(')'));
+		
+		if(param != null && param.length() > 1){
+			
+			String parametros[] = param.split(",");
+			
+			numParametros = parametros.length;
+		}
 		
 		return numParametros;
 	}

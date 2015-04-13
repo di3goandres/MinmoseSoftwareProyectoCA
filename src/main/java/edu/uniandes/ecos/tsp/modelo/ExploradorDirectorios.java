@@ -6,33 +6,74 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+/**
+ * Clase encargada de encontrar las clases java para el analisis funcional.
+ * @author Minmose
+ * @version 1.0
+ * @created 29-mar-2015 09:00:08 p.m.
+ */
 public class ExploradorDirectorios {
 	
+	/**
+	 * 
+	 */
 	private File directorioDeTrabajo;
 	
+	/**
+	 * 
+	 */
 	private int lineasTotales;
 	
+	/**
+	 * 
+	 */
 	private int lineasEfectivas;
 	
+	/**
+	 * 
+	 */
 	private String nombreProyecto;
 	
+	/**
+	 * 
+	 */
 	private ArrayList<File> listadoArchivos;
 	
+	/**
+	 * 
+	 */
 	private ArrayList<ContadorLOC> listaContadores;
 	
+	/**
+	 * 
+	 */
+	private Map<String, List<String>> lineasDeMetodos;
+	
+	/**
+	 * @param projectName
+	 */
 	public ExploradorDirectorios(String projectName){
 		this();
 		this.nombreProyecto = projectName;
 	}
 	
+	/**
+	 * 
+	 */
 	public ExploradorDirectorios(){
+		
 		directorioDeTrabajo = null;
 		listadoArchivos = new ArrayList<File>();
 		listaContadores = new ArrayList<ContadorLOC>();
 		lineasTotales = 0;
 		lineasEfectivas = 0;
 		nombreProyecto = "Undefined";
+		lineasDeMetodos = new HashMap<String, List<String>>();
 	}
 	
 	/**
@@ -42,7 +83,9 @@ public class ExploradorDirectorios {
 	 * <code>false</code> otherwise
 	 */
 	protected boolean iniciarDirectorio(String dirPath){
+		
 		directorioDeTrabajo = new File(dirPath);
+		
 		return (directorioDeTrabajo.exists() && directorioDeTrabajo.isDirectory());
 	}
 	
@@ -60,21 +103,7 @@ public class ExploradorDirectorios {
 		};
 	}
 	
-	/**
-	 * Retrieves the total LOC of the entire project
-	 * @return The numbers of total lines
-	 */
-	public int getLineastotalesProyecto(){
-		return this.lineasTotales;
-	}
 	
-	/**
-	 * Retrieves the number of effective LOC of the entire project
-	 * @return The numbers of effective lines
-	 */
-	public int getLineasEfectivasProyecto(){
-		return this.lineasEfectivas;
-	}
 	
 	/**
 	 * Counts the LOC for each Java source file in the working
@@ -82,23 +111,32 @@ public class ExploradorDirectorios {
 	 * @param directorio The root directory of the current project
 	 */
 	public void enviarAContadorLOC(String directorio){
+		
 		Path dirActual = Paths.get(directorio);
 		String dirAbsoluto = dirActual.toAbsolutePath().toString();
+		
 		if(!iniciarDirectorio(dirAbsoluto)){
+			
 			System.out.println("ProgramContadorLOC: Error al cargar el directorion actual de trabajo");
 			return;
 		}
 		try {
 			recuperarArchivos(dirAbsoluto);
 			//Counts the LOC inside project
+			
+			Collections.sort(listadoArchivos);
+			
 			for(File javaFile : listadoArchivos){
+				
 				ContadorLOC fileContadorLOC = new ContadorLOC();
 				fileContadorLOC.contarLineasDeCodigo(javaFile.getAbsolutePath());
+				lineasDeMetodos.putAll(fileContadorLOC.getLineasDeMetodos());
 				lineasTotales += fileContadorLOC.getLineasTotales();
 				lineasEfectivas += fileContadorLOC.getLineasEfectivas();
 				listaContadores.add(fileContadorLOC);
 			}
 		} catch (IOException e) {
+			
 			System.out.println("ProgramContadorLOC: Excepción al contar las LOC del Proyecto");
 			e.printStackTrace();
 			return;
@@ -111,15 +149,21 @@ public class ExploradorDirectorios {
 	 * @throws IOException
 	 */
 	public void recuperarArchivos(String rutaArchivo) throws IOException{
+		
 		File archivoActual = new File(rutaArchivo);
 		File[] listaArchivosEnActual = archivoActual.listFiles();
+		
 		for(File proximoArchivo : listaArchivosEnActual){
+			
 			if(proximoArchivo.isDirectory()){
 				recuperarArchivos(proximoArchivo.getAbsolutePath());
 			}
 		}
+		
 		File[] javaFiles = archivoActual.listFiles(getJavaFileFilter());
+		
 		for(File nextJavaFile : javaFiles){
+			
 			listadoArchivos.add(nextJavaFile);
 		}
 	}
@@ -146,6 +190,29 @@ public class ExploradorDirectorios {
 	 */
 	public String getNombreProyecto(){
 		return this.nombreProyecto;
+	}
+
+	/**
+	 * @return
+	 */
+	public Map<String, List<String>> getLineasDeMetodos() {
+		return lineasDeMetodos;
+	}
+	
+	/**
+	 * Retrieves the total LOC of the entire project
+	 * @return The numbers of total lines
+	 */
+	public int getLineastotalesProyecto(){
+		return this.lineasTotales;
+	}
+	
+	/**
+	 * Retrieves the number of effective LOC of the entire project
+	 * @return The numbers of effective lines
+	 */
+	public int getLineasEfectivasProyecto(){
+		return this.lineasEfectivas;
 	}
 
 }

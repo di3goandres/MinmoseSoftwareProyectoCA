@@ -1,18 +1,21 @@
 package edu.uniandes.ecos.tsp.modelo;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * Clase encargada de realizar en analisis funcional de un programa.
  * @author Minmose
  * @version 1.0
  * @created 05-abr-2015 09:11:50 a.m.
  */
 public class AnalizadorFuncional implements IAnalizadorFuncional {
 
-	public static final String RUTA_ARCHIVO = "src/site/resources";
+	/**
+	 * Constante con la ruta del archivo
+	 */
+	public static final String RUTA_ARCHIVO = "src/site/resources/";
 	
 	/**
 	 * Representa el total del acoplamiento del metodo analizado.
@@ -54,7 +57,7 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	/**
 	 * Objeto que realiza el conteo de loc de una clase.
 	 */
-	private ContadorLOC contadorLOC;
+	private ExploradorDirectorios exploradorDirectorios;
 
 	/**
 	 * Metodo constructor.
@@ -64,10 +67,9 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 		calculadorDataBindingInterno = new CalculadorDataBindingInterno();
 		calculadorDataBindingExterno = new CalculadorDataBindingExterno();
 		calculadorAcoplamiento = new CalculadorAcoplamiento();
-		contadorLOC = new ContadorLOC();
+		exploradorDirectorios = new  ExploradorDirectorios();
 	}
 
-	
 	/**
 	 * Realiza el analisis de las caracteristicas de un programa.
 	 * @return String con el resultado del analisis.
@@ -75,16 +77,15 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	 */
 	public String realizarAnalisis() throws IOException{
 		
+		exploradorDirectorios.enviarAContadorLOC(RUTA_ARCHIVO);
+		
+		Map<String, List<String>> mapaMetodo= exploradorDirectorios.getLineasDeMetodos();
+		
 		StringBuilder resultado = new StringBuilder();
-		
-		contadorLOC.contarLineasDeCodigo(RUTA_ARCHIVO);
-		
-		Map<String, ArrayList<String>> mapaMetodo= contadorLOC.getLineasDeMetodos();
 		
 		/*
 		 * Se calcula la fuerza de union interna por metodo
 		 */
-		//TODO: completar la implementacion
 		for (String nombreMetodo : mapaMetodo.keySet()) {
 			
 			totalFuerzaUnionInternaMetodo = calculadorDataBindingInterno.calcularFuerzaUnionInternaPorMetodo(mapaMetodo.get(nombreMetodo));
@@ -93,9 +94,10 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 			resultado.append(nombreMetodo);
 			resultado.append(" es: ");
 			resultado.append(totalFuerzaUnionInternaMetodo); 
+			resultado.append("\n"); 
 		}
 		
-		totalFuerzaUnionInterna = calculadorDataBindingInterno.calcularFuerzaUnionInternaTotal(0);
+		totalFuerzaUnionInterna = calculadorDataBindingInterno.calcularFuerzaUnionInternaTotal();
 		
 		resultado.append("El resultado de la fuerza de union interna total del programa es: ");
 		resultado.append(totalFuerzaUnionInterna);
@@ -103,7 +105,11 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 		return resultado.toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.uniandes.ecos.tsp.modelo.IAnalizadorFuncional#mostrarReporte()
+	 */
 	public String mostrarReporte(){
+		//TODO: implementar en el ciclo 2
 		return "";
 	}
 

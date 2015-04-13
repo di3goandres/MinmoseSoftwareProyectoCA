@@ -7,11 +7,10 @@ package edu.uniandes.ecos.tsp.modelo;
  */
 public class CalculadorAcoplamiento {
 
+	/**
+	 * Metodo constructor
+	 */
 	public CalculadorAcoplamiento(){
-
-	}
-
-	public void finalize() throws Throwable {
 
 	}
 

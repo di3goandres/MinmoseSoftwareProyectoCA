@@ -3,12 +3,12 @@ package edu.uniandes.ecos.tsp.modelo;
 import java.io.IOException;
 
 /**
+ * Interface para el analizador funcional
  * @author Minmose
  * @version 1.0
  * @created 29-mar-2015 09:00:08 p.m.
  */
 public interface IAnalizadorFuncional {
-
 
 	/**
 	 * Realiza el analisis de las caracteristicas de un programa.
@@ -17,6 +17,10 @@ public interface IAnalizadorFuncional {
 	 */
 	String realizarAnalisis() throws IOException;
 
+	/**
+	 * Metodo encargado de mostrar el reporte del analisis funcional
+	 * @return String Resultado del analisis funcional
+	 */
 	String mostrarReporte();
 
 }
