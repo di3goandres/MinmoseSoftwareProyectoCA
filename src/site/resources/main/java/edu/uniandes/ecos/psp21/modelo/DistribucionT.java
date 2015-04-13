@@ -32,7 +32,8 @@ public class DistribucionT {
 
 			dividendo = funcionGammaEnteros((int) dividendoGamma);
 
-		} else {
+		} 
+		else {
 
 			dividendo = funcionGammaNoEnteros(dividendoGamma);
 		}
@@ -43,7 +44,8 @@ public class DistribucionT {
 
 			factor2 = funcionGammaEnteros((int) divisorGamma);
 
-		} else {
+		} 
+		else {
 
 			factor2 = funcionGammaNoEnteros(divisorGamma);
 		}

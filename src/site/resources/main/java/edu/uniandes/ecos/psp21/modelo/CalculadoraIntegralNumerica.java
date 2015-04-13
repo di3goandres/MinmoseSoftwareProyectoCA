@@ -75,7 +75,8 @@ public class CalculadoraIntegralNumerica {
 
 			return integralInicial;
 
-		} else {
+		} 
+		else {
 
 			while (diferenciaIntegrales > E) {
 
@@ -85,7 +86,8 @@ public class CalculadoraIntegralNumerica {
 
 					d = ajustarD(d, limiteSuperior);
 					
-				} else if (!ajustarX && (diferenciaIntegrales > E)) {
+				} 
+				else if (!ajustarX && (diferenciaIntegrales > E)) {
 
 					d = ajustarD(d, limiteSuperior);
 				}
@@ -94,7 +96,8 @@ public class CalculadoraIntegralNumerica {
 
 					ajustarX = true;
 
-				} else {
+				} 
+				else {
 
 					ajustarX = false;
 				}
@@ -126,7 +129,8 @@ public class CalculadoraIntegralNumerica {
 
 			limiteSuperior -= d;
 
-		} else {
+		} 
+		else {
 
 			limiteSuperior += d;
 		}

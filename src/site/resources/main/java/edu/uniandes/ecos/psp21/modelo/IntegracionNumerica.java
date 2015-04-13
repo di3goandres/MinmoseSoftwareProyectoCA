@@ -80,12 +80,14 @@ public class IntegracionNumerica {
 				integral = calcularFx(x);
 				numerosSum.add(integral);
 				
-			} else if (i < valoresX.size() - 1) {
+			} 
+			else if (i < valoresX.size() - 1) {
 
 				integral = calcularMultiplicador(i) * calcularFx(x);
 				numerosSum.add(integral);
 
-			} else if (i == valoresX.size() - 1) {
+			} 
+			else if (i == valoresX.size() - 1) {
 
 				integral = calcularFx(x);
 				numerosSum.add(integral);
@@ -110,11 +112,13 @@ public class IntegracionNumerica {
 
 			multiplicador = 1;
 
-		} else if (i % 2 == 0) {
+		} 
+		else if (i % 2 == 0) {
 
 			multiplicador = 2;
 
-		} else {
+		} 
+		else {
 
 			multiplicador = 4;
 		}
