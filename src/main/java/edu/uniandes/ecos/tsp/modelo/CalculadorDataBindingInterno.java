@@ -94,14 +94,16 @@ public class CalculadorDataBindingInterno {
 		Pattern patron = Pattern.compile(EXP_MODIFICADOR_VARIABLE);
 		Matcher matcher = patron.matcher(lineaDeCodigo);
 		
-		if (matcher.find() && (!lineaDeCodigo.contains("if") && !lineaDeCodigo.contains("else") 
-				&& !lineaDeCodigo.contains("while") && !lineaDeCodigo.contains("switch"))) {
+		if (matcher.find() && (!lineaDeCodigo.startsWith("if") && !lineaDeCodigo.startsWith("else") 
+				&& !lineaDeCodigo.startsWith("while") && !lineaDeCodigo.startsWith("switch"))) {
 			
 			return true;
 			
 		}else if (lineaDeCodigo.contains("return") || lineaDeCodigo.contains("set") || lineaDeCodigo.contains("new") || 
 				(lineaDeCodigo.contains("=") && !lineaDeCodigo.contains("!") && !lineaDeCodigo.contains("<")
-						&& !lineaDeCodigo.contains(">") && !lineaDeCodigo.contains("\""))) {
+						&& !lineaDeCodigo.contains(">") && !lineaDeCodigo.contains("\"")
+						&& !lineaDeCodigo.startsWith("if") && !lineaDeCodigo.startsWith("else") 
+						&& !lineaDeCodigo.startsWith("while") && !lineaDeCodigo.startsWith("switch"))) {
 			
 			return true;
 		}
