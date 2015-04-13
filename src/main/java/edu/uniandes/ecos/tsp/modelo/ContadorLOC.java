@@ -184,8 +184,7 @@ public class ContadorLOC {
 		int corchetes = 0;
 		ArrayList<String> lineasDeMetodo = null;
 		HashMap<String, List<String>> lineasPorMetodos = new HashMap<String, List<String>>();
-		String metodoActual = null;
-
+		
 		ListIterator<String> iteradorLineasTotales = lineasDeCodigo
 				.listIterator();
 		
@@ -200,8 +199,6 @@ public class ContadorLOC {
 				
 				esMetodo = true;
 				lineasDeMetodo = new ArrayList<String>();
-				metodoActual = lineaActual.substring(0,
-						lineaActual.indexOf("("));
 				corchetes = 0;
 			}
 
@@ -219,10 +216,9 @@ public class ContadorLOC {
 				// Si llegó al corchete final
 				if (corchetes == 0 && lineasDeMetodo.size() > 1) {
 					
-					lineasPorMetodos.put(new String(metodoActual),
+					lineasPorMetodos.put(new String(lineaActual),
 							new ArrayList<String>(lineasDeMetodo));
 					esMetodo = false;
-					metodoActual = null;
 					lineasDeMetodo = null;
 					continue;
 				}
