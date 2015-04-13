@@ -21,43 +21,43 @@ import java.util.regex.Pattern;
 public class ContadorLOC {
 
 	/**
-	 * Refers to the current file to read
+	 * Se refiere al archivo actual para leer
 	 */
 	private File archivoFuente;
 
 	/**
-	 * Counts the total lines present in file
+	 * Cuenta el total de lineas en el presente 
 	 */
 	private int lineasTotales;
 
 	/**
-	 * Counts the effective lines in the file
+	  * Cuenta las lineas efectivas en el archivo
 	 */
 	private int lineasEfectivas;
 
 	/**
-	 * Counts the number of methods
+	 * Cuenta el numero de metodos
 	 */
 	private int numeroDeMetodos;
 
 	/**
-	 * Stores the method names of the current file
+	  * Almacena los nombres de los metodos del archivo actual
 	 */
 	private List<String> nombresDeMetodos;
 	
 	/**
-	 * Almacena las líneas de código de cada uno de los métodos
+	 * Almacena las lineas de codigo de cada uno de los metodos
 	 * definidos
 	 */
 	private Map<String, List<String>> lineasDeMetodos;
 
 	/**
-	 * Define the string to recognize a One-Line comment
+	 * Define la cadena para reconocer una lina comentarios
 	 */
 	private static final String COMENTARIO_LINEA = "//";
 
 	/**
-	 * Define the string to recognize a Multi-Line comment start
+         * Define la cadena para reconocer el comienzo de Multi-limea de comentarios
 	 */
 	private static final String INICIO_COMENTARIO_MULTIPLE = "/*";
 
@@ -73,7 +73,7 @@ public class ContadorLOC {
 	private ArrayList<String> lineasDeCodigo;
 
 	/**
-	 * Public constructor. No arguments
+	 * Constructor Publico sin comentarios
 	 */
 	public ContadorLOC() {
 		archivoFuente = null;
@@ -86,12 +86,12 @@ public class ContadorLOC {
 	}
 
 	/**
-	 * Tries to retrieve and initialize the file to read
+	 * Trata de recuperar e inicialiar el archivo para leer
 	 * 
 	 * @param rutaDeArchivo
-	 *            Path for the file to read
-	 * @return <code>true</code> if the file exists and could be initialized.
-	 *         <code>false</code> otherwise.
+	 *           Ruta del archivo para leer
+	 * @return <code>true</code> Si el archivo existe y puede ser inicializado.
+	 *         <code>false</code> otros casos.
 	 */
 	protected boolean inicializarArchivo(String rutaDeArchivo) {
 		
@@ -100,10 +100,9 @@ public class ContadorLOC {
 	}
 
 	/**
-	 * Method that reads the number of LOC from a defined file
-	 * 
+	 * Metodo que lee el numero de LOC de un archivo definido
 	 * @param rutaArchivo
-	 *            The input file to be read
+	 *            del archivo de entrada para ser leido
 	 * @throws IOException
 	 */
 	public void contarLineasDeCodigo(String rutaArchivo) throws IOException {
@@ -118,14 +117,14 @@ public class ContadorLOC {
 		String lineaActual = null;
 		Boolean esComentario = false;
 
-		// Read lines from text file
+		//Leer lineas del archivo de texto
 		while ((lineaActual = buffer.readLine()) != null) {
 			
 			lineasTotales++;
 			lineaActual = lineaActual.trim();
 			if (!lineaActual.isEmpty()) {
 				
-				// Verifies if current line is part of a comment
+                                // Verificar si la linea actual es parte de un comentario
 				if (lineaActual.startsWith(COMENTARIO_LINEA)) {
 					
 					continue;
@@ -155,8 +154,8 @@ public class ContadorLOC {
 	}
 
 	/**
-	 * Evaluates if a line belongs to a method declaration
-	 * 
+	 * Evuala si la linea  pertenece a la declaracion de un metodo
+         * 
 	 * @param lineaActual
 	 */
 	private void verificarMetodo(String lineaActual) {
@@ -170,7 +169,7 @@ public class ContadorLOC {
 	}
 	
 	/**
-	 * Este método agrupa en una lista las líneas actuales de código que
+	 * Este metodo agrupa en una lista las lineas actuales de codigo que
 	 * pertenecen al metodo actual y las adiciona al HashMap de métodos cuando
 	 * se haya finalizado
 	 */
@@ -211,7 +210,7 @@ public class ContadorLOC {
 					
 					corchetes--;
 				}
-				// Si llegó al corchete final
+				// Si llega al corchete final
 				if (corchetes == 0 && lineasDeMetodo.size() > 1) {
 					
 					lineasPorMetodos.put(new String(metodoActual),
@@ -227,10 +226,10 @@ public class ContadorLOC {
 	}
 	
 	/**
-	 * Retrieves the names of the methods of the current file
+         * Recupera los nombres d los metodos del archivo actual
 	 * 
-	 * @return A single <code>String</code> with the names of the retrieved
-	 *         methods
+	 * @return Un simple <code>String</code> con los nombres de los metodos
+         *      recuperados
 	 */
 	public String getResumenNombresMetodos() {
 		StringBuffer methodNameBuffer = new StringBuffer();
@@ -241,58 +240,59 @@ public class ContadorLOC {
 	}
 
 	/**
-	 * Getter method for totalLines variable
+         * Metodo para obtener la variable TotalLines
 	 * 
-	 * @return The total lines of code (blanks included) in the current file, or
-	 *         0 if file has not been read
-	 */
+	 * @return El total de lines de codigo (blancas incluidas)en el archivo
+         * actual, o 0 si el archivo no pudo ser leido
+         */
 	public int getLineasTotales() {
 		return this.lineasTotales;
 	}
 
 	/**
-	 * Getter method for effectiveLines variable
-	 * 
-	 * @return The effective lines of code (without blanks or comments) in the
-	 *         current file, or 0 if file has not been read
+	 * Metodo para Obtener las variable de lineas efectivas 
+         * 
+	 * @return Las lineas efectivas de codigo(sin blancos o comentarios) in the7
+         * en el archivo actual, o 0 si el archivo no pudo ser leido
+         * 
 	 */
 	public int getLineasEfectivas() {
 		return this.lineasEfectivas;
 	}
 
 	/**
-	 * Returns the name for the current file to be counted
+         * Retorna el nombre del archivo actual para ser contado
 	 * 
-	 * @return The name of the current source file
+	 * @return El nombre del actualo archivo fuente
 	 */
 	public String getNombreArchivoFuente() {
 		return this.archivoFuente.getName();
 	}
 
 	/**
-	 * Retrieves the number of methods counted by the program
+         * Recupera el numero de metodos contados por el probrama
 	 * 
-	 * @return The number of methods in source file
+	 * @return El numero de metodos en el archivo actual
 	 */
 	public int getConteoMetodos() {
 		return this.numeroDeMetodos;
 	}
 
 	/**
-	 * Retrieves the list of methods for current counter
+         * Recupera la lista de metodos para el actual contador
 	 * 
-	 * @return An <code>ArrayList</code> with the method names
+	 * @return Un <code>ArrayList</code> con los nombres de los metodos
 	 */
 	public List<String> getNombresDeMetodos() {
 		return this.nombresDeMetodos;
 	}
 	
 	/**
-	 * Obtiene el HashMap en el que se almacenan las líneas de código
-	 * correspondientes a los métodos
+	 * Obtiene el HashMap en el que se almacenan las lineas de codigo
+	 * correspondientes a los metodos
 	 * @return	Una instancia de <code>HashMap</code> cuya clave es el nombre de
-	 * cada método en la clase y el valor es un <code>ArrayList</code> con las líneas
-	 * de código del respectivo método
+	 * cada metodo en la clase y el valor es un <code>ArrayList</code> con las líneas
+	 * de codigo del respectivo método
 	 */
 	public Map<String, List<String>> getLineasDeMetodos(){
 		

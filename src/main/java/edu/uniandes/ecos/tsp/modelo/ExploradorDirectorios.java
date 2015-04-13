@@ -77,10 +77,10 @@ public class ExploradorDirectorios {
 	}
 	
 	/**
-	 * Initializes the current working directory
-	 * @param dirPath The path to the current directory
-	 * @return <code>true</code> if directory exists. 
-	 * <code>false</code> otherwise
+         * Inicializa el actual directorio de trabajo
+	 * @param dirPath La ruta del actual directorio
+	 * @return <code>true</code> si el directorio existe. 
+	 * <code>false</code> cualquier otro caso
 	 */
 	protected boolean iniciarDirectorio(String dirPath){
 		
@@ -91,8 +91,9 @@ public class ExploradorDirectorios {
 	
 	/**
 	 * This method retrieves a <code>FilenameFilter</code> instance
-	 * to retrieve the Java source files from a directory. 
-	 * @return
+         * Este metodo retorana un <code>FilenameFilter</code> instancia
+         * a retornar los fuentes de archivos java de un directorio
+	 * @return FilenameFilter
 	 */
 	private FilenameFilter getJavaFileFilter(){
 		return new FilenameFilter() {
@@ -106,9 +107,9 @@ public class ExploradorDirectorios {
 	
 	
 	/**
-	 * Counts the LOC for each Java source file in the working
-	 * directory
-	 * @param directorio The root directory of the current project
+         * Cuenta los LOC por cada fuente de archivo java en el directorio de 
+         * trabajo
+	 * @param directorio La raiz del directorio el actual proyecto
 	 */
 	public void enviarAContadorLOC(String directorio){
 		
@@ -122,7 +123,7 @@ public class ExploradorDirectorios {
 		}
 		try {
 			recuperarArchivos(dirAbsoluto);
-			//Counts the LOC inside project
+			//Cuenta los LOC dentro del proyecto
 			
 			Collections.sort(listadoArchivos);
 			
@@ -145,7 +146,9 @@ public class ExploradorDirectorios {
 	
 	/**
 	 * Retrieves recursively all Java files from given path
-	 * @param rutaArchivo The directory path to retrieve Java files
+         * Recupera recursivamente todos los archivos Java de una ruta dada
+	 * @param rutaArchivo La ruta del directorio, para recuperar los archivos 
+         * Java
 	 * @throws IOException
 	 */
 	public void recuperarArchivos(String rutaArchivo) throws IOException{
@@ -169,23 +172,23 @@ public class ExploradorDirectorios {
 	}
 	
 	/**
-	 * Retrieves the instances of <code>ContadorLOC</code> retrieved
-	 * @return The list of the LOC Counters for current project
+         * Recupera la instancia de <code>ContadorLOC</code> recuperada
+	 * @return  La lista de los contadores LOC para el proyecto actual
 	 */
 	public ArrayList<ContadorLOC> getListaContadores(){
 		return this.listaContadores;
 	}
 	
 	/**
-	 * Retrieves the String for the absolute path of the working directory
-	 * @return The Path of the root working directory
+         * Recupera el String para la ruta absoluta del directorio de trabajo
+	 * @return La ruta raiz del directorio de trabajo
 	 */
 	public String getRutaDirectorioDeTrabajo(){
 		return this.directorioDeTrabajo.getAbsolutePath();
 	}
 	
 	/**
-	 * Retrieves the name of the current Project
+         * Recupera el nombre del proyecto actual
 	 * @return
 	 */
 	public String getNombreProyecto(){
@@ -208,8 +211,8 @@ public class ExploradorDirectorios {
 	}
 	
 	/**
-	 * Retrieves the number of effective LOC of the entire project
-	 * @return The numbers of effective lines
+         * Recupera el numero de lineas efectivas LOC de proyecto entero
+	 * @return El numero de lineas efectiva
 	 */
 	public int getLineasEfectivasProyecto(){
 		return this.lineasEfectivas;
