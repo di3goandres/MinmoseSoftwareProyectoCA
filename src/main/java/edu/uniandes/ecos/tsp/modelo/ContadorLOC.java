@@ -161,11 +161,7 @@ public class ContadorLOC {
 	 */
 	private void verificarMetodo(String lineaActual) {
 		
-		String regex = "^(public|private|protected)\\s[\\w\\<\\>\\s]+\\({1}";
-		Pattern patron = Pattern.compile(regex);
-		Matcher matcher = patron.matcher(lineaActual);
-		
-		if (matcher.find()) {
+		if(esDefinicionMetodo(lineaActual)){
 			
 			numeroDeMetodos++;
 			nombresDeMetodos.add(lineaActual.substring(0,
@@ -194,9 +190,7 @@ public class ContadorLOC {
 			String lineaActual = iteradorLineasTotales.next();
 
 			// Verificar que la linea actual es el nombre de un metodo
-			if (lineaActual.contains("(")
-					&& nombresDeMetodos.contains(lineaActual.substring(0,
-							lineaActual.indexOf("(")))) {
+			if (esDefinicionMetodo(lineaActual)) {
 				
 				esMetodo = true;
 				lineasDeMetodo = new ArrayList<String>();
@@ -211,7 +205,9 @@ public class ContadorLOC {
 				if (lineaActual.endsWith("{")) {
 					
 					corchetes++;
-				} else if (lineaActual.endsWith("}")) {
+				} 
+				
+				else if (lineaActual.endsWith("}")) {
 					
 					corchetes--;
 				}
@@ -301,6 +297,21 @@ public class ContadorLOC {
 	public Map<String, List<String>> getLineasDeMetodos(){
 		
 		return this.lineasDeMetodos;
+	}
+	
+	/**
+	 * Evalua si para la línea de código actual se cumple la expresión
+	 * regular que define si esta linea corresponde a la definición de un método
+	 * @param lineaDeCodigo Línea de Código Actual
+	 * @return
+	 * 	<code>true</code> si la línea de código actual es una definición de método.
+	 * 	<code>false</code> de otro modo.
+	 */
+	private boolean esDefinicionMetodo(String lineaDeCodigo){
+		String regex = "^(public|private|protected)\\s[\\w\\<\\>\\s]+\\({1}";
+		Pattern patron = Pattern.compile(regex);
+		Matcher matcher = patron.matcher(lineaDeCodigo);
+		return matcher.find();
 	}
 
 
