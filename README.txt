@@ -15,7 +15,12 @@ Instrucciones para obtener el repositorio desde github:
 Hacer clone al proyecto con la siguiente URL: https://github.com/di3goandres/MinmoseSoftwareProyectoCA.git
 
 Para ejecutar el programa localmente, ejecutar el siguiente comando:
+cd MinmoseSoftwareProyectoCA
 mvn package
 java -cp target/MinmoseSoftwareProyectoCA-1.0-SNAPSHOT.jar edu.uniandes.ecos.tsp.vista.VistaTexto
+
+Para ejecutar las pruebas automatizadas, ejecutar el siguiente comando:
+cd MinmoseSoftwareProyectoCA
+mvn clean install test -Dtest=AllTests -DfailIfNoTests=false
 
 Para ejecutar el progama desde Heroku, ingresar a la siguiente URL:
