@@ -15,47 +15,47 @@ import java.util.Map;
  * Clase encargada de encontrar las clases java para el analisis funcional.
  * @author Minmose
  * @version 1.0
- * @created 29-mar-2015 09:00:08 p.m.
  */
 public class ExploradorDirectorios {
 	
 	/**
-	 * 
+	 * Directotio donde se encuentra el programa a analizar.
 	 */
 	private File directorioDeTrabajo;
 	
 	/**
-	 * 
+	 * Total de lineas del programa a analizar.
 	 */
 	private int lineasTotales;
 	
 	/**
-	 * 
+	 * Numero de lineas efectivas del proyecto.
 	 */
 	private int lineasEfectivas;
 	
 	/**
-	 * 
+	 * Nombre del proyecto a analizar.
 	 */
 	private String nombreProyecto;
 	
 	/**
-	 * 
+	 * Lista de archivos que hacen parte del programa a analizar.
 	 */
 	private ArrayList<File> listadoArchivos;
 	
 	/**
-	 * 
+	 * Lista de contadores de LOC.
 	 */
 	private ArrayList<ContadorLOC> listaContadores;
 	
 	/**
-	 * 
+	 * Lineas pertenecientes a un metodo especifico.
 	 */
 	private Map<String, List<String>> lineasDeMetodos;
 	
 	/**
-	 * @param projectName
+         * Metodo constructor
+	 * @param projectName nombre del proyecto analizado
 	 */
 	public ExploradorDirectorios(String projectName){
 		this();
@@ -63,7 +63,7 @@ public class ExploradorDirectorios {
 	}
 	
 	/**
-	 * 
+	 * Metodo constructor
 	 */
 	public ExploradorDirectorios(){
 		
@@ -149,7 +149,7 @@ public class ExploradorDirectorios {
          * Recupera recursivamente todos los archivos Java de una ruta dada
 	 * @param rutaArchivo La ruta del directorio, para recuperar los archivos 
          * Java
-	 * @throws IOException
+	 * @throws IOException excepcion al cargar o leer archivos.
 	 */
 	public void recuperarArchivos(String rutaArchivo) throws IOException{
 		
@@ -189,14 +189,15 @@ public class ExploradorDirectorios {
 	
 	/**
          * Recupera el nombre del proyecto actual
-	 * @return
+	 * @return nombre del proyecto analizado
 	 */
 	public String getNombreProyecto(){
 		return this.nombreProyecto;
 	}
 
 	/**
-	 * @return
+         * Metodo que retorna las lineas de un metodo especifico.
+	 * @return mapa con los metodos de una clase y sus lineas
 	 */
 	public Map<String, List<String>> getLineasDeMetodos() {
 		return lineasDeMetodos;

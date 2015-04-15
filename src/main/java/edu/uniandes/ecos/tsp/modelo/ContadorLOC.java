@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
  * Clase encargada del conteo de LOC.
  * @author Minmose
  * @version 1.0
- * @created 29-mar-2015 09:00:08 p.m.
  */
 public class ContadorLOC {
 
@@ -103,7 +102,7 @@ public class ContadorLOC {
 	 * Metodo que lee el numero de LOC de un archivo definido
 	 * @param rutaArchivo
 	 *            del archivo de entrada para ser leido
-	 * @throws IOException
+	 * @throws IOException excepcion al leer o cargar el archivo.
 	 */
 	public void contarLineasDeCodigo(String rutaArchivo) throws IOException {
 		
@@ -156,7 +155,7 @@ public class ContadorLOC {
 	/**
 	 * Evuala si la linea  pertenece a la declaracion de un metodo
          * 
-	 * @param lineaActual
+	 * @param lineaActual linea a analizar
 	 */
 	private void verificarMetodo(String lineaActual) {
 		
@@ -172,6 +171,8 @@ public class ContadorLOC {
 	 * Este metodo agrupa en una lista las lineas actuales de codigo que
 	 * pertenecen al metodo actual y las adiciona al HashMap de métodos cuando
 	 * se haya finalizado
+         * @return mapa con el nombre de los metodos como key
+         * y como value una lista de lineas del metodo.
 	 */
 	public Map<String, List<String>> agruparLineasMetodo() {
 		

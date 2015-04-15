@@ -8,7 +8,6 @@ import java.util.Map;
  * Clase encargada de realizar en analisis funcional de un programa.
  * @author Minmose
  * @version 1.0
- * @created 05-abr-2015 09:11:50 a.m.
  */
 public class AnalizadorFuncional implements IAnalizadorFuncional {
 

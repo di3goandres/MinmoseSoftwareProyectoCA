@@ -6,7 +6,6 @@ import java.io.IOException;
  * Interface para el analizador funcional
  * @author Minmose
  * @version 1.0
- * @created 29-mar-2015 09:00:08 p.m.
  */
 public interface IAnalizadorFuncional {
 

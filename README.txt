@@ -23,4 +23,8 @@ Para ejecutar las pruebas automatizadas, ejecutar el siguiente comando:
 cd MinmoseSoftwareProyectoCA
 mvn clean install test -Dtest=AllTests -DfailIfNoTests=false
 
+El javadoc se encuentra en la carpeta: MinmoseSoftwareProyectoCA\resource\site
+El notebook se encuenta en la carpeta: MinmoseSoftwareProyectoCA\resource\Notebook
+
+
 Para ejecutar el progama desde Heroku, ingresar a la siguiente URL:

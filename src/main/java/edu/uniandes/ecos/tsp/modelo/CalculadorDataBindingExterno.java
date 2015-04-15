@@ -1,9 +1,9 @@
 package edu.uniandes.ecos.tsp.modelo;
 
 /**
+ * Clase encargada de calcular el databinding externo de un programa java.
  * @author Minmose
  * @version 1.0
- * @created 29-mar-2015 09:00:08 p.m.
  */
 public class CalculadorDataBindingExterno {
 
@@ -19,8 +19,9 @@ public class CalculadorDataBindingExterno {
 	/**
 	 * Calcula en data binding externo de un metodo.
 	 * 
-	 * @param numeroDeParametros
-	 * @param numeroVariablesRetorno
+	 * @param numeroDeParametros numero de parametos a analizar
+	 * @param numeroVariablesRetorno numero de variables que retorna un metodo
+         * @return int el valor del calculo del databinding externo por metodo
 	 */
 	public int calculadorDataBindingExternoPorMetodo(int numeroDeParametros, int numeroVariablesRetorno){
 		return 0;
@@ -29,8 +30,9 @@ public class CalculadorDataBindingExterno {
 	/**
 	 * Calcula en data binding externo total de un programa.
 	 * 
-	 * @param numeroDeParametros
-	 * @param numeroVariablesRetorno
+	 * @param numeroDeParametros numero de parametos a analizar
+	 * @param numeroVariablesRetorno  numero de variables que retorna un metodo
+         * @return int el valor del calculo del databinding por metodo
 	 */
 	public int calcularDataBindingExternoTotal(int numeroDeParametros, int numeroVariablesRetorno){
 		return 0;

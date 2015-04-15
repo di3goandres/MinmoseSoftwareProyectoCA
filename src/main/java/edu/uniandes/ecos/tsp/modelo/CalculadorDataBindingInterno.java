@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
  * Clase encargada de calcular la fuerza de union interna o DataBindingInterno.
  * @author Minmose
  * @version 1.0
- * @created 29-mar-2015 09:00:08 p.m.
  */
 public class CalculadorDataBindingInterno {
 	

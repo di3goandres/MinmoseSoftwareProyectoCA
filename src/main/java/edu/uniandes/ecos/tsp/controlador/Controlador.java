@@ -8,7 +8,6 @@ import edu.uniandes.ecos.tsp.modelo.IAnalizadorFuncional;
  * Clase que implementa el controlador del patron MVC.
  * @author Minmose
  * @version 1.0
- * @created 29-mar-2015 09:00:08 p.m.
  */
 public class Controlador {
 
