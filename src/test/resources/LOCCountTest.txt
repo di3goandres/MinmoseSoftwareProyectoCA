@@ -1,0 +1,12 @@
+Lorem
+Ipsum
+Dolor
+Sit
+Anet
+
+//This
+/*
+Is a multi line
+comment
+*/
+End
