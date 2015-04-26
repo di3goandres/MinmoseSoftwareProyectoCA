@@ -10,7 +10,6 @@ Daniel Rentería: df.renteria10@uniandes.edu.co
 Deivid Osorio: da.osorio12@uniandes.edu.co
 Sebastian Cardona: s.cardona12@uniandes.edu.co
 
-
 Instrucciones para obtener el repositorio desde github:
 Hacer clone al proyecto con la siguiente URL: https://github.com/di3goandres/MinmoseSoftwareProyectoCA.git
 
