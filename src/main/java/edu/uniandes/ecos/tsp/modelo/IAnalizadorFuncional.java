@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /**
  * Interface para el analizador funcional
- * @author Minmose
+ * @author Aleja Chica am.chica10@uniandes.edu.co
  * @version 1.0
  */
 public interface IAnalizadorFuncional {

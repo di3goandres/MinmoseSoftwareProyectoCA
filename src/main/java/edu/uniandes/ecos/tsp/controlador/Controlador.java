@@ -6,7 +6,7 @@ import edu.uniandes.ecos.tsp.modelo.IAnalizadorFuncional;
 
 /**
  * Clase que implementa el controlador del patron MVC.
- * @author Minmose
+ * @author Aleja Chica am.chica10@uniandes.edu.co
  * @version 1.0
  */
 public class Controlador {
@@ -34,5 +34,13 @@ public class Controlador {
 		return analizadorFuncional.realizarAnalisis();
 	}
 	
+	/**
+	 * Metodo encargado de mostrar el reporte del analisis funcional
+	 * @return String Resultado del analisis funcional
+	 */
+	public String mostrarReporte(){
+		//TODO: implementar en el ciclo 2
+		return "";
+	}
 
 }

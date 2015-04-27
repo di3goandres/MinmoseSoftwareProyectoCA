@@ -2,7 +2,7 @@ package edu.uniandes.ecos.tsp.modelo;
 
 /**
  * Clase encargada de calcular el acoplamiento de un programa java.
- * @author Minmose
+ * @author Aleja Chica am.chica10@uniandes.edu.co
  * @version 1.0
  */
 public class CalculadorAcoplamiento {
@@ -14,19 +14,19 @@ public class CalculadorAcoplamiento {
 
 	}
 
-	/**
-	 * Realiza el calculo de la complejidad ciclomatica de un metodo.
-         * @return int el valor del calculo de acoplamiento por metodo
-	 */
-	public int calcularAcoplamientoPorMetodo(){
-		return 0;
-	}
 
 	/**
-	 * Realiza el calculo de la complejidad ciclomatica total del programa.
-         * @return int el valor del calculo de acoplamiento total del programa
+	 * Realiza el calculo de la relación de acoplamiento / fuerza total del programa.
+	 * La relación de acoplamiento / fuerza es la relación de los números calculados 
+	 * en el data binding externo y el data binding interno.
+	 * Desde una perspectiva de calidad, valores bajos (<= 0,5) de esta relación 
+	 * se consideran mejores que los altos (> 0.5).
+	 * @param totalFuerzaUnionInterna total de data binding interno del programa.
+	 * @param totalDataBindingExterno total de data binding externo del programa.
+	 * @return int el valor del calculo de acoplamiento total del programa
 	 */
-	public int calcularAcoplamientoTotal(){
+	public int calcularAcoplamientoTotal(int totalFuerzaUnionInterna, int totalDataBindingExterno){
+		
 		return 0;
 	}
 

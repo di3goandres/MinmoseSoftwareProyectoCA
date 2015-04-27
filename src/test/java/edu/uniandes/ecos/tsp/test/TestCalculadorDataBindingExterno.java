@@ -1,9 +1,6 @@
-/**
- * 
- */
 package edu.uniandes.ecos.tsp.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,18 +8,20 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.uniandes.ecos.tsp.modelo.CalculadorDataBindingInterno;
+import edu.uniandes.ecos.tsp.modelo.CalculadorDataBindingExterno;
 
 /**
- * @author ingeneo
+ * Clase de test para la clase CalculadorDataBindingExterno.
+ * @author Aleja Chica am.chica10@uniandes.edu.co
+ * @version 1.0
  *
  */
-public class TestCalculadorDataBindingInterno {
+public class TestCalculadorDataBindingExterno {
 	
 	/**
-	 * Calculador de fuerza de union interna. 
+	 * Calculador de fdata binding externo. 
 	 */
-	CalculadorDataBindingInterno  calculador;
+	CalculadorDataBindingExterno  calculador;
 	
 	/**
 	 * Lineas del metodo a probar
@@ -40,7 +39,7 @@ public class TestCalculadorDataBindingInterno {
 	@Before
 	public void configurarDatos(){
 		
-		calculador = new CalculadorDataBindingInterno();
+		calculador = new CalculadorDataBindingExterno();
 		
 		lineasPorMetodo1 = new ArrayList<String>();
 		lineasPorMetodo1.add("public double calcularIntegral(double dof, int numSeg, double valorX) {");
@@ -70,26 +69,26 @@ public class TestCalculadorDataBindingInterno {
 	}
 
 	/**
-	 * Test method for {@link edu.uniandes.ecos.tsp.modelo.CalculadorDataBindingInterno#calcularFuerzaUnionInternaPorMetodo(int)}.
+	 * Test method for {@link edu.uniandes.ecos.tsp.modelo.CalculadorDataBindingExterno#calculadorDataBindingExternoPorMetodo(List)}.
 	 */
 	@Test
-	public void testCalcularFuerzaUnionInternaPorMetodo() {
+	public void testCalculadorDataBindingExternoPorMetodo() {
 		
-		int total = calculador.calcularFuerzaUnionInternaPorMetodo(lineasPorMetodo1);
+		int total = calculador.calculadorDataBindingExternoPorMetodo(lineasPorMetodo1);
 		
 		assertEquals(13, total);
 	}
 
 	/**
-	 * Test method for {@link edu.uniandes.ecos.tsp.modelo.CalculadorDataBindingInterno#calcularFuerzaUnionInternaTotal(int)}.
+	 * Test method for {@link edu.uniandes.ecos.tsp.modelo.CalculadorDataBindingExterno#calcularDataBindingExternoTotal()}.
 	 */
 	@Test
-	public void testCalcularFuerzaUnionInternaTotal() {
+	public void testCalcularDataBindingExternoTotal() {
 		
-		calculador.calcularFuerzaUnionInternaPorMetodo(lineasPorMetodo1);
-		calculador.calcularFuerzaUnionInternaPorMetodo(lineasPorMetodo2);
+		calculador.calculadorDataBindingExternoPorMetodo(lineasPorMetodo1);
+		calculador.calculadorDataBindingExternoPorMetodo(lineasPorMetodo2);
 		
-		int total = calculador.calcularFuerzaUnionInternaTotal();
+		int total = calculador.calcularDataBindingExternoTotal();
 		
 		assertEquals(19, total);
 	}

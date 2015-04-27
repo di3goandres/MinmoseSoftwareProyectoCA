@@ -5,7 +5,7 @@ import edu.uniandes.ecos.tsp.controlador.Controlador;
 
 /**
  * Clase que implementa la vista en el patron MVC.
- * @author Minmose
+ * @author Aleja Chica am.chica10@uniandes.edu.co
  * @version 1.0
  */
 public class VistaTexto {

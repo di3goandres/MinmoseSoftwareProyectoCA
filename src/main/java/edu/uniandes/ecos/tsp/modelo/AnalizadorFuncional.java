@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * Clase encargada de realizar en analisis funcional de un programa.
- * @author Minmose
+ * @author Aleja Chica am.chica10@uniandes.edu.co
  * @version 1.0
  */
 public class AnalizadorFuncional implements IAnalizadorFuncional {
@@ -16,10 +16,6 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	 */
 	public static final String RUTA_ARCHIVO = "src/site/resources/";
 	
-	/**
-	 * Representa el total del acoplamiento del metodo analizado.
-	 */
-	private int totalAcoplamientoMetodo;
 	/**
 	 * Representa el total del acoplamiento del programa analizado.
 	 */
@@ -32,6 +28,11 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	 * Representa la fuerza de union interna total del programa analizado.
 	 */
 	private int totalFuerzaUnionInterna;
+	
+	/**
+	 * Representa el total del databiding externo del metodo analizado.
+	 */
+	private int totalDataBindingExternoMetodo;
 	
 	/**
 	 * Representa el total del databiding externo del programa analizado.
@@ -82,30 +83,77 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 		
 		StringBuilder resultado = new StringBuilder();
 		
+		resultado.append(analizarDataBindingExterno(mapaMetodo));
+		resultado.append("\n");
+		
+		return resultado.toString();
+	}
+
+	/**
+	 * Metodo que realiza en analisis de databinding externo.
+	 * @param mapaMetodo Mapa con el metodo y sus lineas.
+	 * @return String con el resultado de analisis.
+	 */
+	private String analizarDataBindingExterno(Map<String, List<String>> mapaMetodo) {
+		
+		StringBuilder resultado = new StringBuilder();
+		
 		/*
 		 * Se calcula la fuerza de union interna por metodo
 		 */
 		for (String nombreMetodo : mapaMetodo.keySet()) {
 			
-			totalFuerzaUnionInternaMetodo = calculadorDataBindingInterno.calcularFuerzaUnionInternaPorMetodo(mapaMetodo.get(nombreMetodo));
+			totalDataBindingExternoMetodo = calculadorDataBindingExterno.calculadorDataBindingExternoPorMetodo(mapaMetodo.get(nombreMetodo));
 			
-			resultado.append("El resultado de la fuerza de union interna del metodo ");
+			resultado.append("El resultado del data binding externo del metodo ");
 			resultado.append(nombreMetodo);
 			resultado.append(" es: ");
-			resultado.append(totalFuerzaUnionInternaMetodo); 
+			resultado.append(totalDataBindingExternoMetodo); 
 			resultado.append("\n"); 
 		}
 		
-		totalFuerzaUnionInterna = calculadorDataBindingInterno.calcularFuerzaUnionInternaTotal();
+		totalDataBindingExterno = calculadorDataBindingExterno.calcularDataBindingExternoTotal();
 		
-		resultado.append("El resultado de la fuerza de union interna total del programa es: ");
-		resultado.append(totalFuerzaUnionInterna);
+		resultado.append("El resultado del data binding externo total del programa es: ");
+		resultado.append(totalDataBindingExterno);
 		
 		return resultado.toString();
 	}
+	
+	/**
+	 * Metodo que realiza en analisis de databinding interno.
+	 * @param mapaMetodo Mapa con el metodo y sus lineas.
+	 * @return String con el resultado de analisis.
+	 */
+	private String analizarDataBindingInterno(Map<String, List<String>> mapaMetodo) {
+		
+		StringBuilder resultado = new StringBuilder();
+		
+		//TODO: implementar en el ciclo 2
+		
+		return resultado.toString();
+	}
+	
+	/**
+	 * Este metodo permite calcular el acoplamiento de un programa.
+	 * La relación de acoplamiento / fuerza es la relación de los números calculados 
+	 * en el data binding externo y el data binding interno.
+	 * Desde una perspectiva de calidad, valores bajos (<= 0,5) de esta relación 
+	 * se consideran mejores que los altos (> 0.5).
+	 * @return String con el resultado de analisis.
+	 */
+	private String calcularAcoplamiento(){
+		
+		StringBuilder resultado = new StringBuilder();
 
-	/* (non-Javadoc)
-	 * @see edu.uniandes.ecos.tsp.modelo.IAnalizadorFuncional#mostrarReporte()
+		// TODO: implementar en el ciclo 2
+
+		return resultado.toString();
+	}
+
+	/**
+	 * Metodo encargado de mostrar el reporte del analisis funcional
+	 * @return String Resultado del analisis funcional
 	 */
 	public String mostrarReporte(){
 		//TODO: implementar en el ciclo 2
