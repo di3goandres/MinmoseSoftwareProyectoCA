@@ -59,6 +59,10 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	 */
 	private ExploradorDirectorios exploradorDirectorios;
 
+        /**
+         * Objeto que realiza la gestion de reporte.
+         */
+        private Reporte reporte;
 	/**
 	 * Metodo constructor.
 	 */
@@ -68,6 +72,7 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 		calculadorDataBindingExterno = new CalculadorDataBindingExterno();
 		calculadorAcoplamiento = new CalculadorAcoplamiento();
 		exploradorDirectorios = new  ExploradorDirectorios();
+                reporte = new Reporte();
 	}
 
 	/**
@@ -82,12 +87,14 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 		Map<String, List<String>> mapaMetodo= exploradorDirectorios.getLineasDeMetodos();
 		
 		StringBuilder resultado = new StringBuilder();
-		
-		resultado.append(analizarDataBindingExterno(mapaMetodo));
+                String databindingExterno = analizarDataBindingExterno(mapaMetodo);
+		this.reporte.agregarReporte("Data Binding Externo", databindingExterno);
+		resultado.append(databindingExterno);
 		resultado.append("\n");
 		
 		return resultado.toString();
 	}
+        
 
 	/**
 	 * Metodo que realiza en analisis de databinding externo.
@@ -136,9 +143,9 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	
 	/**
 	 * Este metodo permite calcular el acoplamiento de un programa.
-	 * La relación de acoplamiento / fuerza es la relación de los números calculados 
+	 * La relacin de acoplamiento / fuerza es la relacin de los numeros calculados 
 	 * en el data binding externo y el data binding interno.
-	 * Desde una perspectiva de calidad, valores bajos (<= 0,5) de esta relación 
+	 * Desde una perspectiva de calidad, valores bajos (<= 0,5) de esta relaciï¿½n 
 	 * se consideran mejores que los altos (> 0.5).
 	 * @return String con el resultado de analisis.
 	 */
@@ -156,8 +163,7 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	 * @return String Resultado del analisis funcional
 	 */
 	public String mostrarReporte(){
-		//TODO: implementar en el ciclo 2
-		return "";
+		return this.reporte.mostrarReporte();
 	}
 
 }

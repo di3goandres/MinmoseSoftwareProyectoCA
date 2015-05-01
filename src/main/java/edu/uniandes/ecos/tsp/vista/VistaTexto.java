@@ -1,4 +1,4 @@
-package edu.uniandes.ecos.tsp.vista;
+ package edu.uniandes.ecos.tsp.vista;
 import java.io.IOException;
 
 import edu.uniandes.ecos.tsp.controlador.Controlador;
@@ -13,15 +13,17 @@ public class VistaTexto {
 	/**
 	 * Metodo para ejecutar el programa
 	 * @param args Argumentos para la ejecucion del programa,
-	 */
+	 */  
 	public static void main(String[] args) {
 		
 		try {
 			
 			Controlador controlador = new Controlador();
 			String resultado = controlador.realizarAnalisisFuncional();
+                        
+                        controlador.mostrarReporte();
 			
-			System.out.println(resultado);
+			//System.out.println(resultado);
 			
 		} catch (IOException e) {
 

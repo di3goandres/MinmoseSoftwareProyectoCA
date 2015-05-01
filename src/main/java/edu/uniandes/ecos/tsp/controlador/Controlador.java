@@ -39,8 +39,7 @@ public class Controlador {
 	 * @return String Resultado del analisis funcional
 	 */
 	public String mostrarReporte(){
-		//TODO: implementar en el ciclo 2
-		return "";
+		return this.analizadorFuncional.mostrarReporte();
 	}
 
 }

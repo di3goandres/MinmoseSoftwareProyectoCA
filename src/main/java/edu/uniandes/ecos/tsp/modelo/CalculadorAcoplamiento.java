@@ -16,10 +16,10 @@ public class CalculadorAcoplamiento {
 
 
 	/**
-	 * Realiza el calculo de la relación de acoplamiento / fuerza total del programa.
-	 * La relación de acoplamiento / fuerza es la relación de los números calculados 
+	 * Realiza el calculo de la relaciï¿½n de acoplamiento / fuerza total del programa.
+	 * La relacion de acoplamiento / fuerza es la relacion de los numeros calculados 
 	 * en el data binding externo y el data binding interno.
-	 * Desde una perspectiva de calidad, valores bajos (<= 0,5) de esta relación 
+	 * Desde una perspectiva de calidad, valores bajos (<= 0,5) de esta relaciï¿½n 
 	 * se consideran mejores que los altos (> 0.5).
 	 * @param totalFuerzaUnionInterna total de data binding interno del programa.
 	 * @param totalDataBindingExterno total de data binding externo del programa.
