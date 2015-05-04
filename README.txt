@@ -28,3 +28,4 @@ El notebook se encuenta en la carpeta: MinmoseSoftwareProyectoCA\resource\Notebo
 
 
 Para ejecutar el progama desde Heroku, ingresar a la siguiente URL:
+(La implementacion de Heroku es del ciclo2)
