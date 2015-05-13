@@ -25,9 +25,15 @@ public class CalculadorAcoplamiento {
 	 * @param totalDataBindingExterno total de data binding externo del programa.
 	 * @return int el valor del calculo de acoplamiento total del programa
 	 */
-	public int calcularAcoplamientoTotal(int totalFuerzaUnionInterna, int totalDataBindingExterno){
+	public double calcularAcoplamientoTotal(int totalFuerzaUnionInterna, int totalDataBindingExterno){
 		
-		return 0;
+		if(totalFuerzaUnionInterna != 0){
+			
+			return totalDataBindingExterno / totalFuerzaUnionInterna;
+		}else {
+			
+			return totalDataBindingExterno;
+		}
 	}
 
 }

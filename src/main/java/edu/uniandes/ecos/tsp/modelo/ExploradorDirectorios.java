@@ -54,7 +54,12 @@ public class ExploradorDirectorios {
 	private Map<String, List<String>> lineasDeMetodos;
 	
 	/**
-         * Metodo constructor
+	 * Almacena las variables globales del programa
+	 */
+	private List<String> variablesGlobales;
+	
+	/**
+     * Metodo constructor
 	 * @param projectName nombre del proyecto analizado
 	 */
 	public ExploradorDirectorios(String projectName){
@@ -74,10 +79,11 @@ public class ExploradorDirectorios {
 		lineasEfectivas = 0;
 		nombreProyecto = "Undefined";
 		lineasDeMetodos = new HashMap<String, List<String>>();
+		variablesGlobales = new ArrayList<String>();
 	}
 	
 	/**
-         * Inicializa el actual directorio de trabajo
+     * Inicializa el actual directorio de trabajo
 	 * @param dirPath La ruta del actual directorio
 	 * @return <code>true</code> si el directorio existe. 
 	 * <code>false</code> cualquier otro caso
@@ -91,8 +97,8 @@ public class ExploradorDirectorios {
 	
 	/**
 	 * This method retrieves a <code>FilenameFilter</code> instance
-         * Este metodo retorana un <code>FilenameFilter</code> instancia
-         * a retornar los fuentes de archivos java de un directorio
+     * Este metodo retorana un <code>FilenameFilter</code> instancia
+     * a retornar los fuentes de archivos java de un directorio
 	 * @return FilenameFilter
 	 */
 	private FilenameFilter getJavaFileFilter(){
@@ -107,8 +113,8 @@ public class ExploradorDirectorios {
 	
 	
 	/**
-         * Cuenta los LOC por cada fuente de archivo java en el directorio de 
-         * trabajo
+     * Cuenta los LOC por cada fuente de archivo java en el directorio de 
+     * trabajo
 	 * @param directorio La raiz del directorio el actual proyecto
 	 */
 	public void enviarAContadorLOC(String directorio){
@@ -135,10 +141,17 @@ public class ExploradorDirectorios {
 				lineasTotales += fileContadorLOC.getLineasTotales();
 				lineasEfectivas += fileContadorLOC.getLineasEfectivas();
 				listaContadores.add(fileContadorLOC);
+				variablesGlobales.addAll(fileContadorLOC.getVariablesGlobales());
 			}
 		} catch (IOException e) {
 			
 			System.out.println("ProgramContadorLOC: Excepción al contar las LOC del Proyecto");
+			e.printStackTrace();
+			return;
+			
+		} catch (Exception e) {
+
+			System.out.println("ProgramContadorLOC: Excepción general");
 			e.printStackTrace();
 			return;
 		}
@@ -146,9 +159,9 @@ public class ExploradorDirectorios {
 	
 	/**
 	 * Retrieves recursively all Java files from given path
-         * Recupera recursivamente todos los archivos Java de una ruta dada
+     * Recupera recursivamente todos los archivos Java de una ruta dada
 	 * @param rutaArchivo La ruta del directorio, para recuperar los archivos 
-         * Java
+     * Java
 	 * @throws IOException excepcion al cargar o leer archivos.
 	 */
 	public void recuperarArchivos(String rutaArchivo) throws IOException{
@@ -172,7 +185,7 @@ public class ExploradorDirectorios {
 	}
 	
 	/**
-         * Recupera la instancia de <code>ContadorLOC</code> recuperada
+	 * Recupera la instancia de <code>ContadorLOC</code> recuperada
 	 * @return  La lista de los contadores LOC para el proyecto actual
 	 */
 	public ArrayList<ContadorLOC> getListaContadores(){
@@ -180,7 +193,7 @@ public class ExploradorDirectorios {
 	}
 	
 	/**
-         * Recupera el String para la ruta absoluta del directorio de trabajo
+     * Recupera el String para la ruta absoluta del directorio de trabajo
 	 * @return La ruta raiz del directorio de trabajo
 	 */
 	public String getRutaDirectorioDeTrabajo(){
@@ -188,7 +201,7 @@ public class ExploradorDirectorios {
 	}
 	
 	/**
-         * Recupera el nombre del proyecto actual
+     * Recupera el nombre del proyecto actual
 	 * @return nombre del proyecto analizado
 	 */
 	public String getNombreProyecto(){
@@ -196,7 +209,7 @@ public class ExploradorDirectorios {
 	}
 
 	/**
-         * Metodo que retorna las lineas de un metodo especifico.
+     * Metodo que retorna las lineas de un metodo especifico.
 	 * @return mapa con los metodos de una clase y sus lineas
 	 */
 	public Map<String, List<String>> getLineasDeMetodos() {
@@ -212,11 +225,15 @@ public class ExploradorDirectorios {
 	}
 	
 	/**
-         * Recupera el numero de lineas efectivas LOC de proyecto entero
+     * Recupera el numero de lineas efectivas LOC de proyecto entero
 	 * @return El numero de lineas efectiva
 	 */
 	public int getLineasEfectivasProyecto(){
 		return this.lineasEfectivas;
+	}
+
+	public List<String> getVariablesGlobales() {
+		return variablesGlobales;
 	}
 
 }

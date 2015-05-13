@@ -26,11 +26,15 @@ public class CalculadorDataBindingInterno {
 	
 	/**
 	 * Realiza el calculo de la  fuerza de union interna de un metodo.
-	 * @param lineasPorMetodo Lista con las lineas del metodo a analizar.
+	 * @param declaracionMetodo Linea con la declaracion del metodo.
 	 * @return Int total data binding interno por metodo.
 	 */
-		public int calcularFuerzaUnionInternaPorMetodo(List<String> lineasPorMetodo){
-		return 0;
+		public int calcularFuerzaUnionInternaPorMetodo(String declaracionMetodo){
+			
+			int dataBindingInternoMetodo = Utilidades.determinarNumParametrosMetodo(declaracionMetodo);
+			totalDataBindingInterno.add(dataBindingInternoMetodo);
+			
+		return dataBindingInternoMetodo;
 	}
 
 	
@@ -39,7 +43,17 @@ public class CalculadorDataBindingInterno {
 	 * @return int total data binding interno total del programa analizado.
 	 */
 	public int calcularFuerzaUnionInternaTotal(List<String> totalVariablesGlobales) {
-		return 0;
+		
+		int totalDBInternoPrograma = 0;
+		
+		for (Integer dataBindingInternoMetodo : totalDataBindingInterno) {
+			
+			totalDBInternoPrograma += dataBindingInternoMetodo;
+		}
+		
+		totalDBInternoPrograma += totalVariablesGlobales.size();
+		
+		return totalDBInternoPrograma;
 	}
 	
 	

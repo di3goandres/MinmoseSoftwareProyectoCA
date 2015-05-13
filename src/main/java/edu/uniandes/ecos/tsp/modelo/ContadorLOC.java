@@ -20,6 +20,16 @@ import java.util.regex.Pattern;
 public class ContadorLOC {
 
 	/**
+	 * Constante con la expresion regular para saber si una linea es definicion de un metodo
+	 */
+	private static final String REGEX_DEFINICION_METODO = "^(public|private|protected)\\s[\\w\\<\\>\\s]+\\({1}";
+
+	/**
+	 * Constante con la expresion regular para saber si una linea es declaracion de variable global
+	 */
+	private static final String REGEX_DEFINICION_VARIABLE_GLOBAL = "^(private)\\s+([\\w]+)\\s*([a-zA-Z_$][\\w$]*)";
+	
+	/**
 	 * Se refiere al archivo actual para leer
 	 */
 	private File archivoFuente;
@@ -56,7 +66,7 @@ public class ContadorLOC {
 	private static final String COMENTARIO_LINEA = "//";
 
 	/**
-         * Define la cadena para reconocer el comienzo de Multi-limea de comentarios
+     * Define la cadena para reconocer el comienzo de Multi-limea de comentarios
 	 */
 	private static final String INICIO_COMENTARIO_MULTIPLE = "/*";
 
@@ -70,6 +80,11 @@ public class ContadorLOC {
 	 * actual
 	 */
 	private ArrayList<String> lineasDeCodigo;
+	
+	/**
+	 * Almacena las variables globales del programa
+	 */
+	private List<String> variablesGlobales;
 
 	/**
 	 * Constructor Publico sin comentarios
@@ -82,6 +97,7 @@ public class ContadorLOC {
 		nombresDeMetodos = new ArrayList<String>();
 		lineasDeCodigo = new ArrayList<String>();
 		lineasDeMetodos = new HashMap<String, List<String>>();
+		variablesGlobales = new ArrayList<String>();
 	}
 
 	/**
@@ -142,7 +158,12 @@ public class ContadorLOC {
 				}
 				
 				lineasEfectivas++;
-				verificarMetodo(lineaActual);
+				
+				if(!verificarMetodo(lineaActual)){
+					
+					verificarVariableGlobal(lineaActual);
+				}
+				
 				lineasDeCodigo.add(lineaActual);
 			}
 		}
@@ -154,16 +175,36 @@ public class ContadorLOC {
 
 	/**
 	 * Evuala si la linea  pertenece a la declaracion de un metodo
-         * 
+     * 
 	 * @param lineaActual linea a analizar
+	 * @return true si se trata de un metodo, false en caso contrario
 	 */
-	private void verificarMetodo(String lineaActual) {
+	private boolean verificarMetodo(String lineaActual) {
+		
+		boolean esMetodo = false;
 		
 		if(esDefinicionMetodo(lineaActual)){
 			
 			numeroDeMetodos++;
 			nombresDeMetodos.add(lineaActual.substring(0,
 					lineaActual.indexOf("(")));
+			
+			esMetodo  = true;
+		}
+		
+		return esMetodo;
+	}
+	
+	/**
+	 * Metodo que permite determinar si la linea actual corresponde a la declaracion de una variable global o campo 
+	 * de un programa.
+	 * @param lineaActual Linea a analizar
+	 */
+	private void verificarVariableGlobal(String lineaActual) {
+
+		if (lineaEsVariableGlobal(lineaActual)) {
+
+			variablesGlobales.add(lineaActual);
 		}
 	}
 	
@@ -171,8 +212,8 @@ public class ContadorLOC {
 	 * Este metodo agrupa en una lista las lineas actuales de codigo que
 	 * pertenecen al metodo actual y las adiciona al HashMap de métodos cuando
 	 * se haya finalizado
-         * @return mapa con el nombre de los metodos como key
-         * y como value una lista de lineas del metodo.
+     * @return mapa con el nombre de los metodos como key
+     * y como value una lista de lineas del metodo.
 	 */
 	public Map<String, List<String>> agruparLineasMetodo() {
 		
@@ -227,10 +268,10 @@ public class ContadorLOC {
 	}
 	
 	/**
-         * Recupera los nombres d los metodos del archivo actual
+    * Recupera los nombres d los metodos del archivo actual
 	 * 
 	 * @return Un simple <code>String</code> con los nombres de los metodos
-         *      recuperados
+     *      recuperados
 	 */
 	public String getResumenNombresMetodos() {
 		StringBuffer methodNameBuffer = new StringBuffer();
@@ -241,28 +282,28 @@ public class ContadorLOC {
 	}
 
 	/**
-         * Metodo para obtener la variable TotalLines
+     * Metodo para obtener la variable TotalLines
 	 * 
 	 * @return El total de lines de codigo (blancas incluidas)en el archivo
-         * actual, o 0 si el archivo no pudo ser leido
-         */
+     * actual, o 0 si el archivo no pudo ser leido
+     */
 	public int getLineasTotales() {
 		return this.lineasTotales;
 	}
 
 	/**
 	 * Metodo para Obtener las variable de lineas efectivas 
-         * 
+     * 
 	 * @return Las lineas efectivas de codigo(sin blancos o comentarios) in the7
-         * en el archivo actual, o 0 si el archivo no pudo ser leido
-         * 
+     * en el archivo actual, o 0 si el archivo no pudo ser leido
+     * 
 	 */
 	public int getLineasEfectivas() {
 		return this.lineasEfectivas;
 	}
 
 	/**
-         * Retorna el nombre del archivo actual para ser contado
+     * Retorna el nombre del archivo actual para ser contado
 	 * 
 	 * @return El nombre del actualo archivo fuente
 	 */
@@ -271,7 +312,7 @@ public class ContadorLOC {
 	}
 
 	/**
-         * Recupera el numero de metodos contados por el probrama
+     * Recupera el numero de metodos contados por el probrama
 	 * 
 	 * @return El numero de metodos en el archivo actual
 	 */
@@ -280,7 +321,7 @@ public class ContadorLOC {
 	}
 
 	/**
-         * Recupera la lista de metodos para el actual contador
+     * Recupera la lista de metodos para el actual contador
 	 * 
 	 * @return Un <code>ArrayList</code> con los nombres de los metodos
 	 */
@@ -309,11 +350,29 @@ public class ContadorLOC {
 	 * 	<code>false</code> de otro modo.
 	 */
 	private boolean esDefinicionMetodo(String lineaDeCodigo){
-		String regex = "^(public|private|protected)\\s[\\w\\<\\>\\s]+\\({1}";
-		Pattern patron = Pattern.compile(regex);
+		
+		Pattern patron = Pattern.compile(REGEX_DEFINICION_METODO);
 		Matcher matcher = patron.matcher(lineaDeCodigo);
+		
 		return matcher.find();
 	}
 
+	/**
+	 *  Metodo que permite determinar si la linea actual corresponde a la declaracion de una variable global o campo 
+	 * de un programa.
+	 * @param lineaDeCodigo Linea a analizar
+	 * @return true si la linea es variable global o campo, false en caso contrario.
+	 */
+	private boolean lineaEsVariableGlobal(String lineaDeCodigo){
+		
+		Pattern patron = Pattern.compile(REGEX_DEFINICION_VARIABLE_GLOBAL);
+		Matcher matcher = patron.matcher(lineaDeCodigo);
+		
+		return matcher.find();
+	}
+
+	public List<String> getVariablesGlobales() {
+		return variablesGlobales;
+	}
 
 }

@@ -19,7 +19,7 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	/**
 	 * Representa el total del acoplamiento del programa analizado.
 	 */
-	private int totalAcoplamiento;
+	private double totalAcoplamiento;
 	/**
 	 * Representa la fuerza de union interna del metodo analizado.
 	 */
@@ -59,10 +59,11 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	 */
 	private ExploradorDirectorios exploradorDirectorios;
 
-        /**
-         * Objeto que realiza la gestion de reporte.
-         */
-        private Reporte reporte;
+    /**
+     * Objeto que realiza la gestion de reporte.
+     */
+    private Reporte reporte;
+    
 	/**
 	 * Metodo constructor.
 	 */
@@ -72,7 +73,7 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 		calculadorDataBindingExterno = new CalculadorDataBindingExterno();
 		calculadorAcoplamiento = new CalculadorAcoplamiento();
 		exploradorDirectorios = new  ExploradorDirectorios();
-                reporte = new Reporte();
+        reporte = new Reporte();
 	}
 
 	/**
@@ -82,14 +83,40 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	 */
 	public String realizarAnalisis() throws IOException{
 		
+		StringBuilder resultado = new StringBuilder();
+		
 		exploradorDirectorios.enviarAContadorLOC(RUTA_ARCHIVO);
 		
+		/*
+		 * Data Binding externo
+		 */
 		Map<String, List<String>> mapaMetodo= exploradorDirectorios.getLineasDeMetodos();
-		
-		StringBuilder resultado = new StringBuilder();
-                String databindingExterno = analizarDataBindingExterno(mapaMetodo);
+        String databindingExterno = analizarDataBindingExterno(mapaMetodo);
+        
 		this.reporte.agregarReporte("Data Binding Externo", databindingExterno);
 		resultado.append(databindingExterno);
+		resultado.append("\n");
+		
+		/*
+		 * Data Binding interno
+		 */
+		List<String> variablesGlobales = exploradorDirectorios.getVariablesGlobales();
+		String databindingInterno = analizarDataBindingInterno(mapaMetodo, variablesGlobales);
+		
+		this.reporte.agregarReporte("Data Binding Interno", databindingInterno);
+		resultado.append("--------------------------------------------------------------------");
+		resultado.append("\n");
+		resultado.append(databindingInterno);
+		resultado.append("\n");
+		
+		/*
+		 * Acoplamiento
+		 */
+		String acoplamiento = calcularAcoplamiento();
+		this.reporte.agregarReporte("Relacion fuerza acoplamiento", acoplamiento);
+		resultado.append("--------------------------------------------------------------------");
+		resultado.append("\n");
+		resultado.append(acoplamiento);
 		resultado.append("\n");
 		
 		return resultado.toString();
@@ -106,7 +133,7 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 		StringBuilder resultado = new StringBuilder();
 		
 		/*
-		 * Se calcula la fuerza de union interna por metodo
+		 * Se calcula el data binding externo por metodo
 		 */
 		for (String nombreMetodo : mapaMetodo.keySet()) {
 			
@@ -130,13 +157,34 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	/**
 	 * Metodo que realiza en analisis de databinding interno.
 	 * @param mapaMetodo Mapa con el metodo y sus lineas.
+	 * @param variablesGlobales Arreglo con las variables globales de un programa.
 	 * @return String con el resultado de analisis.
 	 */
-	private String analizarDataBindingInterno(Map<String, List<String>> mapaMetodo) {
+	private String analizarDataBindingInterno(Map<String, List<String>> mapaMetodo, List<String> variablesGlobales) {
 		
 		StringBuilder resultado = new StringBuilder();
 		
-		//TODO: implementar en el ciclo 2
+		/*
+		 * Data Binding interno por metodo
+		 */
+		for (String nombreMetodo : mapaMetodo.keySet()) {
+			
+			totalFuerzaUnionInternaMetodo = calculadorDataBindingInterno.calcularFuerzaUnionInternaPorMetodo(nombreMetodo);
+			
+			resultado.append("El resultado del data binding interno del metodo ");
+			resultado.append(nombreMetodo);
+			resultado.append(" es: ");
+			resultado.append(totalFuerzaUnionInternaMetodo); 
+			resultado.append("\n"); 
+		}
+		
+		/*
+		 * Data Binding interno total de programa
+		 */
+		totalFuerzaUnionInterna = calculadorDataBindingInterno.calcularFuerzaUnionInternaTotal(variablesGlobales);
+		
+		resultado.append("El resultado del data binding interno total del programa es: ");
+		resultado.append(totalFuerzaUnionInterna);
 		
 		return resultado.toString();
 	}
@@ -145,7 +193,7 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 	 * Este metodo permite calcular el acoplamiento de un programa.
 	 * La relacin de acoplamiento / fuerza es la relacin de los numeros calculados 
 	 * en el data binding externo y el data binding interno.
-	 * Desde una perspectiva de calidad, valores bajos (<= 0,5) de esta relaci�n 
+	 * Desde una perspectiva de calidad, valores bajos (<= 0,5) de esta relacion 
 	 * se consideran mejores que los altos (> 0.5).
 	 * @return String con el resultado de analisis.
 	 */
@@ -153,8 +201,11 @@ public class AnalizadorFuncional implements IAnalizadorFuncional {
 		
 		StringBuilder resultado = new StringBuilder();
 
-		// TODO: implementar en el ciclo 2
-
+		totalAcoplamiento = calculadorAcoplamiento.calcularAcoplamientoTotal(totalFuerzaUnionInterna, totalDataBindingExterno);
+		
+		resultado.append("La relacion de fuerza de acoplamiento del programa es: ");
+		resultado.append(totalAcoplamiento);
+		
 		return resultado.toString();
 	}
 

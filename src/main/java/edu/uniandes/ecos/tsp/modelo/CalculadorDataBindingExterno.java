@@ -66,14 +66,14 @@ public class CalculadorDataBindingExterno {
 	 */
 	public int calcularDataBindingExternoTotal(){
 		
-		int totalDBInternoPrograma = 0;
+		int totalDBExternoPrograma = 0;
 		
 		for (Integer totalMetodo : totalDataBindingExterno) {
 			
-			totalDBInternoPrograma += totalMetodo;
+			totalDBExternoPrograma += totalMetodo;
 		}
 		
-		return totalDBInternoPrograma;
+		return totalDBExternoPrograma;
 	}
 	
 

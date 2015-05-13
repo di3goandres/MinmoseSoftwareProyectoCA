@@ -19,7 +19,10 @@ public class VistaTexto {
 		try {
 			Controlador controlador = new Controlador();
 			String resultado = controlador.realizarAnalisisFuncional();
+			System.out.println(resultado);
+			
 			controlador.mostrarReporte();
+			
 		} catch (IOException e) {
 
 			System.out.println("Ocurrio un error al leer los archivos java para su analisis.");

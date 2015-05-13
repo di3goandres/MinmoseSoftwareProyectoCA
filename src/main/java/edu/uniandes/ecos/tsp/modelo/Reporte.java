@@ -18,7 +18,7 @@ public class Reporte {
      */
     public Reporte() {
 
-        this.reporte = new ArrayList();
+        this.reporte = new ArrayList<String>();
     }
 
     /**
